@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from os import chdir
 
-chdir("D:\JoyClashV3\Files")
+chdir("./Files")
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 

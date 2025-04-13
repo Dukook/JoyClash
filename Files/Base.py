@@ -2,11 +2,9 @@ import pygame
 from random import randint
 from Player import Player
 from Bullet import Bullet, Surge, Berry, Spookie
-from os import chdir
 from Account import Choice, Write
 
 
-chdir("D:\JoyClashV3\Files")
 
 info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)
@@ -853,6 +851,9 @@ class Game :
         self.c_2=pygame.transform.scale(pygame.image.load("Images/2.png").convert_alpha(), (6*self.block, 4*self.block))
         self.c_3=pygame.transform.scale(pygame.image.load("Images/3.png").convert_alpha(), (6*self.block, 4*self.block))
 
+        #init bullet
+        self.bullet=Bullet(self.pers, self.block, self.capa[3])
+        self.bullet2=Bullet(self.pers2, self.block, self.capa2[3])
         
     
     def event(self) :
@@ -893,7 +894,7 @@ class Game :
                 self.player.canshoot = False
                 self.canshot=False
                 self.canhit=True
-                self.bullet=Bullet(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.pers, self.player.shot_acc[1], self.block, self.capa[3])
+                self.bullet.settings(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.player.shot_acc[1])
                 self.player.shot_acc=[False, False]
                 self.shooting=[True, self.ticks, True]
                 if self.pers=="Spookie" :
@@ -909,7 +910,7 @@ class Game :
                 self.player2.canshoot = False
                 self.canshot2=False
                 self.canhit2=True
-                self.bullet2=Bullet(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.pers2, self.player2.shot_acc[1], self.block, self.capa2[3])
+                self.bullet2.settings(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.player2.shot_acc[1])
                 self.player2.shot_acc=[False, False]
                 self.shooting2=[True, self.ticks, True]
                 if self.pers2=="Spookie" :
@@ -1451,7 +1452,7 @@ while running :
 
     if play :
         WIDTH, HEIGHT = sett[3], sett[4]
-        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
         game=Game(screen)
         game.run()
     else :
