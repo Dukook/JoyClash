@@ -1,9 +1,0 @@
-	Berry heal
-	pause menu
-	graphismes
-	red grd
-	perso sur ecran de fin
-	bug raccourci
-	équilibrage
-	bug visuel
-	bug deg
