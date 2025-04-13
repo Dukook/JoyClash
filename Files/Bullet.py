@@ -15,7 +15,7 @@ class Bullet :
         if not acc :
             angle+=randint(-30, 30)
         self.image2=pygame.transform.rotate(self.image, angle)
-        self.rect=self.image2.get_rect(x=x+self.block/2-self.image.get_width()/2, y=y+self.block/2-self.image.get_height()/2)
+        self.rect=self.image2.get_rect(x=x+self.block/2-self.image2.get_width()/2, y=y+self.block/2-self.image2.get_height()/2)
         self.x=cos(radians(angle))*self.block/(3*self.speed)
         self.y=-sin(radians(angle))*self.block/(3*self.speed)
 

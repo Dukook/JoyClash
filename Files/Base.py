@@ -1452,7 +1452,7 @@ while running :
 
     if play :
         WIDTH, HEIGHT = sett[3], sett[4]
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
         game=Game(screen)
         game.run()
     else :
