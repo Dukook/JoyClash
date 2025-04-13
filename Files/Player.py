@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from os import chdir
 
-chdir("D:\JoyClashV3\Files")
+chdir("D:\JoyClashV4\Files")
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
@@ -43,7 +43,7 @@ class Player :
         self.stamina=2500
         self.can=True
         self.stamina_speed=1
-        self.reloading=False
+        self.reloading=False#jamais utilisé yet
         self.sprinting=False
         self.x1=x
         self.y1=y
@@ -58,6 +58,7 @@ class Player :
         self.i_death=0
         self.modif=1
         self.modif2=1
+        self.damage_boost=1
         if j==0 :
             self.stam_pos = (30,20, 100)
             self.right,self.left=True, False

@@ -3,19 +3,26 @@ from math import *
 from random import randint
 from os import chdir
 
-chdir("D:\JoyClashV3\Files")
+chdir("D:\JoyClashV4\Files")
 
 class Bullet :
-    def __init__(self, x, y, angle, brawleur, acc, block, speed):
+    def __init__(self, brawleur, block, speed):
         self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
-        if not acc :
-            angle+=randint(-30, 30)
+        self.block=block
         scaling=(block/2)/(self.image.get_height())
         self.image=pygame.transform.scale_by(self.image, scaling)
+        
+        self.rect=self.image.get_rect(x=-1000, y=-1000)
+        self.speed=speed
+        
+
+    def settings(self, x, y, angle, acc) :
+        if not acc :
+            angle+=randint(-30, 30)
         self.image=pygame.transform.rotate(self.image, angle)
-        self.rect=self.image.get_rect(x=x+block/2-self.image.get_width()/2, y=y+block/2-self.image.get_height()/2)
-        self.x=cos(radians(angle))*block/(3*speed)
-        self.y=-sin(radians(angle))*block/(3*speed)
+        self.rect.x, self.rect.y=x+self.block/2-self.image.get_width()/2, y+self.block/2-self.image.get_height()/2
+        self.x=cos(radians(angle))*self.block/(3*self.speed)
+        self.y=-sin(radians(angle))*self.block/(3*self.speed)
 
     def event(self) :
         pass
@@ -29,29 +36,3 @@ class Bullet :
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-class Surge :
-
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-block, y-block, 3*block, 3*block)
-        self.image=pygame.transform.scale(pygame.image.load("Images/boom.png").convert_alpha(), (3*block, 3*block))
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)
-
-class Berry :
-
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-0.75*block, y-0.75*block, 2.5*block, 2.5*block)
-        self.image=pygame.transform.scale(pygame.image.load("Images/ice_cream.png").convert_alpha(), (2.5*block, 2.5*block))
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)
-
-class Spookie :
-
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-2*block, y-2*block, 5*block, 5*block)
-        self.image=pygame.transform.scale(pygame.image.load("Images/Cookie.png").convert_alpha(), (5*block, 5*block))
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)
