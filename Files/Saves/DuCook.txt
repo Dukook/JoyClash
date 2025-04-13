@@ -1,0 +1,11 @@
+17400
+253618
+True
+True
+True
+True
+True
+True
+True
+True
+True
