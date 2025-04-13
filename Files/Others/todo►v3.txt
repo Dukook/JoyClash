@@ -1,0 +1,26 @@
+	btr rotation player
+	surge 3 frame atk
+	pot spawn prev
+	nv perso eau
+	nv perso cookie(en cours)
+	nv perso poison
+	emt tumbs d
+	debug hitbox atk
+	VFX deg(red grd)
+	btr pause
+	lux sur pers
+	correction dbl acc
+	map rand
+	UIIA
+	autres bug(dead_zone, self.pick, visuel, account)
+	contour et taille perso front
+	nvll map
+	hank rework
+	btr READ_ME_TO_PLAY
+	buff UIIA
+	btr bush
+	btr perf/less freeze(FPS)
+	correction bug mvt(le PC nul)
+	btr play again
+	btr 321
+	victory sound
