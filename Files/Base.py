@@ -966,7 +966,7 @@ class Game :
         
         if self.plan == "play" :
 
-            
+            #print(pygame.time.Clock.get_fps(self.clock))
 
             #over time
             self.mort+=1
