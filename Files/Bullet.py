@@ -34,27 +34,37 @@ class Bullet :
 
 class Surge :
 
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-block, y-block, 3*block, 3*block)
+    def __init__(self, block):
+        self.block=block
+        
         self.image=pygame.transform.scale(pygame.image.load("Images/boom.png").convert_alpha(), (3*block, 3*block))
+
+    def settings(self, x, y) :
+        self.rect=pygame.rect.Rect(x-self.block, y-self.block, 3*self.block, 3*self.block)
 
     def draw(self, screen) :
         screen.blit(self.image, self.rect)
 
 class Berry :
 
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-0.75*block, y-0.75*block, 2.5*block, 2.5*block)
+    def __init__(self, block):
+        self.block=block
         self.image=pygame.transform.scale(pygame.image.load("Images/ice_cream.png").convert_alpha(), (2.5*block, 2.5*block))
+
+    def settings(self, x, y) :
+        self.rect=pygame.rect.Rect(x-0.75*self.block, y-0.75*self.block, 2.5*self.block, 2.5*self.block)
 
     def draw(self, screen) :
         screen.blit(self.image, self.rect)
 
 class Spookie :
 
-    def __init__(self, x, y, block):
-        self.rect=pygame.rect.Rect(x-2*block, y-2*block, 5*block, 5*block)
+    def __init__(self, block):
+        self.block=block
         self.image=pygame.transform.scale(pygame.image.load("Images/Cookie.png").convert_alpha(), (5*block, 5*block))
+
+    def settings(self, x, y) :
+        self.rect=pygame.rect.Rect(x-2*self.block, y-2*self.block, 5*self.block, 5*self.block)
 
     def draw(self, screen) :
         screen.blit(self.image, self.rect)

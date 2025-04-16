@@ -854,6 +854,9 @@ class Game :
         #init bullet
         self.bullet=Bullet(self.pers, self.block, self.capa[3])
         self.bullet2=Bullet(self.pers2, self.block, self.capa2[3])
+        self.a_spookie=Spookie(self.block)
+        self.a_surge=Surge(self.block)
+        self.a_berry=Berry(self.block)
         
     
     def event(self) :
@@ -898,7 +901,7 @@ class Game :
                 self.player.shot_acc=[False, False]
                 self.shooting=[True, self.ticks, True]
                 if self.pers=="Spookie" :
-                    self.a_spookie=Spookie(self.player.rect.x, self.player.rect.y, self.block)
+                    self.a_spookie.settings(self.player.rect.x, self.player.rect.y)
                     self.time_spookie=self.ticks
                     if self.player2.rect.colliderect(self.a_spookie):
                         self.player2.PV-=self.capa[1]*self.damage_boost*1.2
@@ -914,7 +917,7 @@ class Game :
                 self.player2.shot_acc=[False, False]
                 self.shooting2=[True, self.ticks, True]
                 if self.pers2=="Spookie" :
-                    self.a_spookie=Spookie(self.player2.rect.x, self.player2.rect.y, self.block)
+                    self.a_spookie.settings(self.player2.rect.x, self.player2.rect.y)
                     self.time_spookie=self.ticks
                     if self.player.rect.colliderect(self.a_spookie):
                         self.player.PV-=self.capa2[1]*self.damage_boost2*1.2
@@ -1108,10 +1111,10 @@ class Game :
                     if self.pers=="Surge" :
                         self.player.canshoot=False
                         self.canshot=True
-                        self.a_surge=Surge(self.bullet.rect.x, self.bullet.rect.y, self.block)
+                        self.a_surge.settings(self.bullet.rect.x, self.bullet.rect.y)
                         self.time_surge=self.ticks
                     elif self.pers=="Berry" :
-                        self.a_berry=Berry(self.bullet.rect.x, self.bullet.rect.y, self.block)
+                        self.a_berry.settings(self.bullet.rect.x, self.bullet.rect.y)
 
             
             
@@ -1148,10 +1151,10 @@ class Game :
                     if self.pers2=="Surge" : #pas besoin de mettre surge2 car in n'y as pas de doublons
                         self.player2.canshoot=False
                         self.canshot2=True
-                        self.a_surge=Surge(self.bullet2.rect.x, self.bullet2.rect.y, self.block)
+                        self.a_surge.settings(self.bullet2.rect.x, self.bullet2.rect.y)
                         self.time_surge=self.ticks
                     elif self.pers2=="Berry" :
-                        self.a_berry=Berry(self.bullet2.rect.x, self.bullet2.rect.y, self.block)
+                        self.a_berry.settings(self.bullet2.rect.x, self.bullet2.rect.y)
 
             #explosion de surge
 
