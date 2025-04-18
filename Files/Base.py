@@ -2,11 +2,9 @@ import pygame
 from random import randint
 from Player import Player
 from Bullet import Bullet, Surge, Berry, Spookie
-from os import chdir
 from Account import Choice, Write
 
 
-chdir("D:\JoyClashV3\Files")
 
 info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)
@@ -130,11 +128,10 @@ class Menu :
 
         
         
-        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2=False, False, False, False, False, False, False, False, False#bcp de can
+        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2, self.can_swapp=False, False, False, False, False, False, False, False, False, False#bcp de can
         
 
         #sons
-        
         pygame.mixer.music.load("Songs/loby.mp3")
         pygame.mixer.music.set_volume(self.son/100)
         pygame.mixer.music.play()
@@ -236,21 +233,56 @@ class Menu :
             self.purchase2=self.joy2.get_button(1)
             change_map=self.joy1.get_button(0)
             UIIA=pygame.key.get_pressed()
-            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] :
+            vibr=self.joy1.get_button(2)
+            vibr2=self.joy2.get_button(2)
+            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
+                self.can_swapp=False
                 global nb_pers
-                nb_pers=9
+                if nb_pers==8 :
+                    nb_pers=9
+                else :
+                    nb_pers=8
+                    if self.pick1==8 :
+                        self.pick1=0
+                        if self.pick1==self.pick2 :
+                            self.pick1+=1
+                    elif self.pick2==8 :
+                        self.pick2=0
+                        if self.pick1==self.pick2 :
+                            self.pick2+=1
+
+            if not UIIA[pygame.K_SPACE]:
+                self.can_swapp=True
 
             if self.srumb :
-                vibr=self.joy1.get_button(2)
-                vibr2=self.joy2.get_button(2)
+                
 
                 if vibr :
                     self.joy1.rumble(1,1,1)
+                    
 
                 if vibr2 :
                     self.joy2.rumble(1,1,1)
-
-            if self.purchase1 or self.play1 :
+                    
+                    
+            if vibr :
+                self.pick1=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick1+=1
+                if self.pick1>=nb_pers :
+                    self.pick1=0
+                    if self.pick1==self.pick2 :
+                        self.pick1+=1
+            if vibr2 :
+                self.pick2=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick2-=1
+                if self.pick2<0 :
+                    self.pick2=nb_pers-1
+                    if self.pick1==self.pick2 :
+                        self.pick2-=1
+                
+            if self.purchase1 or self.play1 or vibr :
                 pass
             else :
 
@@ -299,7 +331,7 @@ class Menu :
                 elif not change_map :
                     self.canchange_map=True
 
-            if self.purchase2 or self.play2 :
+            if self.purchase2 or self.play2 or vibr2 :
                 pass
             else :
 
@@ -788,6 +820,7 @@ class Game :
         #importation du song
         self.son=sett[2]/100
         pygame.mixer.music.stop()
+                   
         pygame.mixer.music.load("Songs/321.mp3")
         pygame.mixer.music.set_volume(self.son)
         pygame.mixer.music.play()
@@ -853,6 +886,12 @@ class Game :
         self.c_2=pygame.transform.scale(pygame.image.load("Images/2.png").convert_alpha(), (6*self.block, 4*self.block))
         self.c_3=pygame.transform.scale(pygame.image.load("Images/3.png").convert_alpha(), (6*self.block, 4*self.block))
 
+        #init bullet
+        self.bullet=Bullet(self.pers, self.block, self.capa[3])
+        self.bullet2=Bullet(self.pers2, self.block, self.capa2[3])
+        self.a_spookie=Spookie(self.block)
+        self.a_surge=Surge(self.block)
+        self.a_berry=Berry(self.block)
         
     
     def event(self) :
@@ -875,7 +914,10 @@ class Game :
                 self.clock.tick(1)
                 
             self.plan="play"
-            pygame.mixer.music.load("Songs/Trophy.mp3")
+            if self.pers=="UIIA" or self.pers2=="UIIA" :
+                pygame.mixer.music.load("Songs/UIIA.mp3")
+            else :
+                pygame.mixer.music.load("Songs/Trophy.mp3")
             pygame.mixer.music.play()
 
         elif self.plan == "play" :
@@ -893,11 +935,11 @@ class Game :
                 self.player.canshoot = False
                 self.canshot=False
                 self.canhit=True
-                self.bullet=Bullet(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.pers, self.player.shot_acc[1], self.block, self.capa[3])
+                self.bullet.settings(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.player.shot_acc[1])
                 self.player.shot_acc=[False, False]
                 self.shooting=[True, self.ticks, True]
                 if self.pers=="Spookie" :
-                    self.a_spookie=Spookie(self.player.rect.x, self.player.rect.y, self.block)
+                    self.a_spookie.settings(self.player.rect.x, self.player.rect.y)
                     self.time_spookie=self.ticks
                     if self.player2.rect.colliderect(self.a_spookie):
                         self.player2.PV-=self.capa[1]*self.damage_boost*1.2
@@ -909,11 +951,11 @@ class Game :
                 self.player2.canshoot = False
                 self.canshot2=False
                 self.canhit2=True
-                self.bullet2=Bullet(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.pers2, self.player2.shot_acc[1], self.block, self.capa2[3])
+                self.bullet2.settings(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.player2.shot_acc[1])
                 self.player2.shot_acc=[False, False]
                 self.shooting2=[True, self.ticks, True]
                 if self.pers2=="Spookie" :
-                    self.a_spookie=Spookie(self.player2.rect.x, self.player2.rect.y, self.block)
+                    self.a_spookie.settings(self.player2.rect.x, self.player2.rect.y)
                     self.time_spookie=self.ticks
                     if self.player.rect.colliderect(self.a_spookie):
                         self.player.PV-=self.capa2[1]*self.damage_boost2*1.2
@@ -965,7 +1007,7 @@ class Game :
         
         if self.plan == "play" :
 
-            
+            #print(pygame.time.Clock.get_fps(self.clock))
 
             #over time
             self.mort+=1
@@ -1107,10 +1149,10 @@ class Game :
                     if self.pers=="Surge" :
                         self.player.canshoot=False
                         self.canshot=True
-                        self.a_surge=Surge(self.bullet.rect.x, self.bullet.rect.y, self.block)
+                        self.a_surge.settings(self.bullet.rect.x, self.bullet.rect.y)
                         self.time_surge=self.ticks
                     elif self.pers=="Berry" :
-                        self.a_berry=Berry(self.bullet.rect.x, self.bullet.rect.y, self.block)
+                        self.a_berry.settings(self.bullet.rect.x, self.bullet.rect.y)
 
             
             
@@ -1147,10 +1189,10 @@ class Game :
                     if self.pers2=="Surge" : #pas besoin de mettre surge2 car in n'y as pas de doublons
                         self.player2.canshoot=False
                         self.canshot2=True
-                        self.a_surge=Surge(self.bullet2.rect.x, self.bullet2.rect.y, self.block)
+                        self.a_surge.settings(self.bullet2.rect.x, self.bullet2.rect.y)
                         self.time_surge=self.ticks
                     elif self.pers2=="Berry" :
-                        self.a_berry=Berry(self.bullet2.rect.x, self.bullet2.rect.y, self.block)
+                        self.a_berry.settings(self.bullet2.rect.x, self.bullet2.rect.y)
 
             #explosion de surge
 

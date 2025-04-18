@@ -1,6 +1,4 @@
-from os import chdir
 
-chdir("D:\JoyClashV3\Files")
 psd=None
 
 def lire(who) :
