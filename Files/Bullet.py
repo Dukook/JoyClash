@@ -7,7 +7,7 @@ class Bullet :
         self.block=block
         self.speed=speed
         self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
-        self.rect=self.image.get_rect(x=-100, y=-100)
+        self.rect=self.image.get_rect(x=-10000, y=-10000)
 
         scaling=(block/2)/(self.image.get_height())
         self.image=pygame.transform.scale_by(self.image, scaling)

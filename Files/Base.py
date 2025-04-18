@@ -21,7 +21,7 @@ pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubul
 # "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000, 6),
       "Berry": (1000, 230, 1.1, 1.2, 600, 1800, 5),
-      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 6),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 4),
       "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600, 4),
       "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 15),
       "Spookie": (1220, 150, 1.0, 1.0, 650, 1900, 5),
@@ -799,6 +799,7 @@ class Game :
         self.background=pygame.transform.scale(pygame.image.load("Images/background.png").convert_alpha(), (WIDTH, HEIGHT))
 
         #autres
+        self.explosion=bool(1+1==2)
         self.running=True
         self.p_duration=-10000
         self.mort=0
@@ -826,6 +827,10 @@ class Game :
         self.UIIA=pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285))
 
         self.ice=pygame.transform.scale(pygame.image.load("Images/ice_cream.png").convert_alpha(), (self.block*2,self.block*2))
+        self.ice_pos=self.ice.get_rect(x=-1000, y=-1000)
+
+        self.boom=pygame.transform.scale(pygame.image.load("Images/boom.png").convert_alpha(), (self.block*3.5,self.block*3.5))
+        self.boom_pos=self.boom.get_rect(x=-1000,y=-1000)
 
         self.down=pygame.transform.scale(pygame.image.load("Images/down.png").convert_alpha(), (self.block/2,self.block/2))
 
@@ -1312,31 +1317,34 @@ class Game :
                 player.canshoot=False
                 player.shooting=True
                 player.canhit=True
+                player.hitwall=False
                 bullet.settings(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
                 player.duration_bullet=self.ticks
+                if pers=="Surge" :
+                    self.explosion=False
 
 
+            if self.ticks-player.duration_bullet>capa[5] :
+                player.canshoot=True
+            elif self.ticks-player.duration_bullet>capa[4] :
+                player.shooting=False
 
             if pers=="Hank" :
                 print(player.canshoot)
 
             if pers=="Hank" :
-                if self.ticks-player.duration_bullet>capa[5] :
-                    player.canshoot=True
-                elif self.ticks-player.duration_bullet>capa[4] :
-                    player.shooting=False
                 if player.shooting :
                     for mur in self.murs :
                         if mur.colliderect(bullet) :
                             player.shooting=False
-                            player.canhit=False
+                            player.hitwall=True
                             player.duration_bullet=self.ticks-capa[5]+300
-                    if player.canhit :
+                    if not player.hitwall :
                         bullet.update()
                         bullet.draw(self.screen)
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
-                            
+                            player.hitwall=True
                             player_adv.PV-=capa[1]*player.damage_boost
                             player_adv.i_death=3*self.block
                             if self.rumb :
@@ -1345,40 +1353,78 @@ class Game :
                             player.duration_bullet=self.ticks-capa[5]+300
             
             elif pers=="Berry" :
-                if self.ticks-player.duration_bullet>capa[5] :
-                    player.canshoot=True
-                elif self.ticks-player.duration_bullet>capa[4] :
-                    player.shooting=False
-                    player.ice_pos.center=bullet.rect.center
-                #self.screen.blit(self.ice, player.ice_pos)
+                if self.ticks-player.duration_bullet>capa[4] :
+                    self.ice_pos.center=bullet.rect.center
+                #self.screen.blit(self.ice, self.ice_pos)
 
-                if player_adv.rect.colliderect(player.ice_pos) :
+                if player_adv.rect.colliderect(self.ice_pos) :
                     player_adv.PV-=capa[1]/FPS*player.damage_boost
                     player_adv.i_death=1*self.block
                     if self.rumb :
                         player_adv.joy.rumble(1,1,200)
-                if player.rect.colliderect(player.ice_pos) :
+                if player.rect.colliderect(self.ice_pos) :
                     player.PV+=capa[1]/(berry_heal*FPS)*player.damage_boost
 
                 if player.shooting :
                     for mur in self.murs :
                         if mur.colliderect(bullet) :
                             player.shooting=False
-                            player.canhit=False
+                            player.hitwall=False
                             player.duration_bullet=self.ticks-capa[5]+300
-                            player.ice_pos.center=bullet.rect.center
-                    if player.canhit :
+                            self.ice_pos.center=bullet.rect.center
+                    if not player.hitwall :
                         bullet.update()
                         bullet.draw(self.screen)
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
-                            
+                            player.hitwall=True
                             player_adv.PV-=capa[1]*player.damage_boost
                             player_adv.i_death=3*self.block
-                            player.ice_pos.center=bullet.rect.center
+                            self.ice_pos.center=bullet.rect.center
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
                             player.duration_bullet=self.ticks-capa[5]+300
+            
+            if pers=="Surge" :
+                if self.ticks-player.duration_bullet>capa[4] and not self.explosion:
+                    self.boom_pos.center=bullet.rect.center
+                    player.time_effect=self.ticks
+                    self.explosion=True
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[5]+300
+                            player.time_effect=self.ticks
+                            self.boom_pos.center=bullet.rect.center
+                            self.explosion=True
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player.time_effect=self.ticks
+                            self.boom_pos.center=bullet.rect.center
+                            self.explosion=True
+                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]+300
+                            
+                if self.ticks-player.time_effect<300 :
+                    self.screen.blit(self.boom, self.boom_pos)
+                    if player.canhit :
+                        print("ui")
+                        if player_adv.rect.colliderect(self.boom_pos) :
+                            player.canhit=False
+                            player_adv.PV-=capa[1]*player.damage_boost*1.2
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+
 
 
         
@@ -1396,9 +1442,9 @@ class Game :
         if self.plan=="play" :
             
             if self.pers=="Berry" :
-                self.screen.blit(self.ice, self.player.ice_pos)
+                self.screen.blit(self.ice, self.ice_pos)
             elif self.pers2=="Berry" :
-                self.screen.blit(self.ice, self.player2.ice_pos)
+                self.screen.blit(self.ice, self.ice_pos)
 
             
             #potion

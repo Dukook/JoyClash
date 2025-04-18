@@ -10,7 +10,7 @@ font = pygame.font.Font("Others/arial.ttf", 20)
 # "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000, 6),
       "Berry": (1000, 230, 1.1, 1.2, 600, 1800, 5),
-      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 6),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 4),
       "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600, 4),
       "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 15),
       "Spookie": (1220, 150, 1.0, 1.0, 650, 1900, 5),
@@ -58,8 +58,11 @@ class Player :
         self.shot_acc=[not not not not False, not True]#lol
         self.canshoot=True
         self.shooting=False
+        self.canhit=True
+        self.hitwall=False
         self.duration_bullet=-1000
-        self.ice_pos=pygame.rect.Rect(-1000,-1000, self.block*2, self.block*2)
+        self.time_effect=-1000
+        
         self.lock=False
         self.death=pygame.transform.scale(pygame.image.load("Images/death.png").convert_alpha(), (18*self.block, 18*self.block))
         self.i_death=0
@@ -158,9 +161,12 @@ class Player :
             self.stamina_speed=2
 
         #shoot
-        if shoot and self.canshoot and self.ajusted_angle!=None and self.ammo>0 and not self.reloading:
-            self.shot_acc=[True, lock]
-            self.ammo-=1
+        if shoot and self.canshoot and self.ajusted_angle!=None and not self.reloading:
+            if self.ammo>0 :
+                self.shot_acc=[True, lock]
+                self.ammo-=1
+            else :
+                self.joy.rumble(0.5,0.5,500)
 
         self.lock=bool(self.ajusted_angle!=None and lock)
 
