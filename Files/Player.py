@@ -6,16 +6,17 @@ chdir("Files")
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
-# "nom" : [PV, Damage, speed, bulletspeed, range, spam]
-capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000),
-      "Berry": (1000, 230, 1.1, 1.2, 600, 1800),
-      "Surge": (1260, 225, 0.9, 1.3, 650, 2000),
-      "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600),
-      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400),
-      "Spookie": (1220, 150, 1.0, 1.0, 650, 1900),
-      "Mushy": (1050, 130, 1.05, 1.35, 400, 2100),
-      "Bubule": (1400, 200, 0.85, 0.9, 600, 1700),
-      "UIIA": (1900, 315, 1.7, 0.65, 1300, 1300)
+
+# "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
+capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000, 6),
+      "Berry": (1000, 230, 1.1, 1.2, 600, 1800, 5),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 6),
+      "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600, 4),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 15),
+      "Spookie": (1220, 150, 1.0, 1.0, 650, 1900, 5),
+      "Mushy": (1050, 130, 1.05, 1.35, 400, 2100, 8),
+      "Bubule": (1400, 200, 0.85, 0.9, 600, 1700, 10),
+      "UIIA": (1900, 315, 1.7, 0.65, 1300, 1300, 69)
 }
 
 class Player :
@@ -32,7 +33,7 @@ class Player :
         self.rect=self.image.get_rect(x=x,y=y)
 
         self.vise=pygame.image.load("Images/vise3.png").convert_alpha()
-        self.vise=pygame.transform.scale(self.vise, (20*self.block,10*self.block))
+        self.vise=pygame.transform.scale(self.vise, (self.capa[4]*self.block*0.03,10*self.block))
 
         
 
@@ -43,8 +44,10 @@ class Player :
         self.speed=2
         self.stamina=2500
         self.can=True
+        self.canvibr=True
         self.stamina_speed=1
         self.reloading=False#jamais utilisé yet
+        self.ammo=self.capa[6]
         self.sprinting=False
         self.x1=x
         self.y1=y
@@ -56,7 +59,7 @@ class Player :
         self.canshoot=True
         self.shooting=False
         self.duration_bullet=-1000
-        self.ice_pos=(-1000,-1000)
+        self.ice_pos=pygame.rect.Rect(-1000,-1000, self.block*2, self.block*2)
         self.lock=False
         self.death=pygame.transform.scale(pygame.image.load("Images/death.png").convert_alpha(), (18*self.block, 18*self.block))
         self.i_death=0
@@ -64,12 +67,12 @@ class Player :
         self.modif2=1
         self.damage_boost=1
         if j==0 :
-            self.stam_pos = (30,20, 100)
+            self.stam_pos = (30,20, 100, 160)
             self.right,self.left=True, False
             self.axe_x1, self.axe_y1=1, 0
             self.death=pygame.transform.rotate(self.death, -90)
         else :
-            self.stam_pos = (WIDTH-80, 20, WIDTH-150)
+            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-190)
             self.right,self.left=False, True
             self.axe_x1, self.axe_y1=-1, 0
             self.death=pygame.transform.rotate(self.death, 90)
@@ -95,8 +98,11 @@ class Player :
         
 
         
-        if vibr :
-            self.joy.rumble(1,1,1)
+        if vibr and self.canvibr and self.ammo!=self.capa[6]:
+            
+            self.reloading=True
+            self.time_reloading=pygame.time.get_ticks()
+
 
         #direction joueur
         self.right=bool(self.axe_x1>self.zone_morte)
@@ -116,7 +122,7 @@ class Player :
             self.stamina_speed=4
 
         #variation de l'endurance
-        if sprint and not lock and self.stamina>=20 and self.can and (self.left or self.up or self.right or self.down):
+        if sprint and not lock and self.stamina>=20 and self.can and (self.left or self.up or self.right or self.down) and not self.reloading:
             self.stamina-=20
             self.sprinting=True
         else :
@@ -152,10 +158,12 @@ class Player :
             self.stamina_speed=2
 
         #shoot
-        if shoot and self.canshoot and self.ajusted_angle!=None:
+        if shoot and self.canshoot and self.ajusted_angle!=None and self.ammo>0 and not self.reloading:
             self.shot_acc=[True, lock]
+            self.ammo-=1
 
         self.lock=bool(self.ajusted_angle!=None and lock)
+
             
         #les print qui carry
         '''if self.j==0 :
@@ -186,6 +194,13 @@ class Player :
             self.pos_death=((-6*self.block-self.PV/self.capa[0]*12*self.block)+self.i_death,0)
         else :
             self.pos_death=((20*self.block+self.PV/self.capa[0]*12*self.block)-self.i_death, 0)
+
+        if self.reloading :
+            self.joy.rumble(0.5,0.5,1)
+            if pygame.time.get_ticks()-self.time_reloading>3000 :
+                self.reloading=False
+                self.canvibr=True
+                self.ammo=self.capa[6]
 
 
     def move_x(self, x1):
@@ -237,8 +252,12 @@ class Player :
             self.ticks=0
 
         #les PV
-        text_PV = font.render(str(int(self.PV)), True, "orange")
+        text_PV = font.render(str(int(self.PV)), True, "red")
         screen.blit(text_PV, (self.stam_pos[2], self.stam_pos[1]*1.8))
+
+        #les munitions
+        text_ammo = font.render(str(int(self.ammo)), True, "orange")
+        screen.blit(text_ammo, (self.stam_pos[3], self.stam_pos[1]*1.8))
 
         
 
