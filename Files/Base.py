@@ -2,11 +2,8 @@ import pygame
 from random import randint
 from Player import Player
 from Bullet import *
-from os import chdir
 from Account import Choice, Write
 
-
-chdir("D:\JoyClashV4\Files")
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
@@ -21,16 +18,16 @@ pygame.init()
 
 
 pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "UIIA"]
-# "nom" : [PV, Damage, speed, bullettime&speed]
-capa={"Hank" : (1320, 210, 0.9, 1.2),
-      "Berry": (1000, 230, 1.1, 1.2),
-      "Surge": (1260, 225, 0.9, 1.3),
-      "Carroje": (1080, 280, 0.8, 1.7),
-      "Popofox": (1150, 155, 1.2, 0.6),
-      "Spookie": (1220, 150, 1.0, 1.0),
-      "Mushy": (1050, 130, 1.05, 1.5),
-      "Bubule": (1400, 200, 0.85, 0.9),
-      "UIIA": (1800, 310, 1.5, 0.65)
+# "nom" : [PV, Damage, speed, bulletspeed, range, spam]
+capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000),
+      "Berry": (1000, 230, 1.1, 1.2, 600, 1800),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 2000),
+      "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400),
+      "Spookie": (1220, 150, 1.0, 1.0, 650, 1900),
+      "Mushy": (1050, 130, 1.05, 1.35, 400, 2100),
+      "Bubule": (1400, 200, 0.85, 0.9, 600, 1700),
+      "UIIA": (1900, 315, 1.7, 0.65, 1300, 1300)
 }
 nb_pers=8
 
@@ -130,7 +127,7 @@ class Menu :
 
         
         
-        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2=False, False, False, False, False, False, False, False, False#bcp de can
+        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2, self.can_swapp=False, False, False, False, False, False, False, False, False, False#bcp de can
         
 
         #sons
@@ -236,13 +233,28 @@ class Menu :
             self.purchase2=self.joy2.get_button(1)
             change_map=self.joy1.get_button(0)
             UIIA=pygame.key.get_pressed()
-            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] :
+            vibr=self.joy1.get_button(2)
+            vibr2=self.joy2.get_button(2)
+            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
+                self.can_swapp=False
                 global nb_pers
-                nb_pers=9
+                if nb_pers==8 :
+                    nb_pers=9
+                else :
+                    nb_pers=8
+                    if self.pick1==8 :
+                        self.pick1=0
+                        if self.pick1==self.pick2 :
+                            self.pick1+=1
+                    elif self.pick2==8 :
+                        self.pick2=0
+                        if self.pick1==self.pick2 :
+                            self.pick2+=1
+
+            if not UIIA[pygame.K_SPACE]:
+                self.can_swapp=True
 
             if self.srumb :
-                vibr=self.joy1.get_button(2)
-                vibr2=self.joy2.get_button(2)
 
                 if vibr :
                     self.joy1.rumble(1,1,1)
@@ -250,7 +262,24 @@ class Menu :
                 if vibr2 :
                     self.joy2.rumble(1,1,1)
 
-            if self.purchase1 or self.play1 :
+            if vibr :
+                self.pick1=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick1+=1
+                if self.pick1>=nb_pers :
+                    self.pick1=0
+                    if self.pick1==self.pick2 :
+                        self.pick1+=1
+            if vibr2 :
+                self.pick2=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick2-=1
+                if self.pick2<0 :
+                    self.pick2=nb_pers-1
+                    if self.pick1==self.pick2 :
+                        self.pick2-=1
+
+            if self.purchase1 or self.play1 or vibr :
                 pass
             else :
 
@@ -299,7 +328,7 @@ class Menu :
                 elif not change_map :
                     self.canchange_map=True
 
-            if self.purchase2 or self.play2 :
+            if self.purchase2 or self.play2 or vibr2:
                 pass
             else :
 
@@ -881,7 +910,10 @@ class Game :
                 self.clock.tick(1)
                 
             self.plan="play"
-            pygame.mixer.music.load("Songs/Trophy.mp3")
+            if self.pers=="UIIA" or self.pers2=="UIIA" :
+                pygame.mixer.music.load("Songs/UIIA.mp3")
+            else :
+                pygame.mixer.music.load("Songs/Trophy.mp3")
             pygame.mixer.music.play()
 
         elif self.plan == "play" :
@@ -1290,59 +1322,75 @@ class Game :
                 self.p_duration=self.ticks-self.tempo3
 
     def updraw_bullet(self, pers, player, player_adv, bullet, capa) :
-        print(player.shot_acc)
         if player.shot_acc[0]==True :
             player.shot_acc[0]=False
             player.canshoot=False
-            shooting=True
-            canhit=True
+            player.shooting=True
+            player.canhit=True
             bullet.settings(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
-            duration_bullet=self.ticks
+            player.duration_bullet=self.ticks
 
-        try :
-            if self.ticks-duration_bullet>2000*capa[3] :
-                player.canshoot=True
-                shooting=False
-        except :
-            pass
+
+
         if pers=="Hank" :
-            if shooting :
+            print(player.canshoot)
+
+        if pers=="Hank" :
+            if self.ticks-player.duration_bullet>capa[5] :
+                player.canshoot=True
+            elif self.ticks-player.duration_bullet>capa[4] :
+                player.shooting=False
+            if player.shooting :
                 for mur in self.murs :
                     if mur.colliderect(bullet) :
-                        shooting=False
-                        canhit=False
-                if canhit :
+                        player.shooting=False
+                        player.canhit=False
+                        if self.ticks-player.duration_bullet>capa[5]-300 :
+                            player.duration_bullet=self.ticks-capa[5]+300
+                if player.canhit :
                     bullet.update()
+                    bullet.draw(self.screen)
                     if player_adv.rect.colliderect(bullet) :
-                        canhit=False
+                        player.canhit=False
+                        
                         player_adv.PV-=capa[1]*player.damage_boost
                         player_adv.i_death=3*self.block
                         if self.rumb :
                             player_adv.joy.rumble(1,1,1000)
                         player.PV+=50
+                        if self.ticks-player.duration_bullet>capa[5]-300 :
+                            player.duration_bullet=self.ticks-capa[5]+300
         
         elif pers=="Berry" :
-            try :
-                self.screen.blit(self.ice, ice_pos)
-            except :
-                pass
-            if shooting :
+            if self.ticks-player.duration_bullet>capa[5] :
+                player.canshoot=True
+            elif self.ticks-player.duration_bullet>capa[4] :
+                player.shooting=False
+            self.screen.blit(self.ice, player.ice_pos)
+            if player.shooting :
                 for mur in self.murs :
                     if mur.colliderect(bullet) :
-                        shooting=False
-                        canhit=False
-                if canhit :
+                        player.shooting=False
+                        player.canhit=False
+                        if self.ticks-player.duration_bullet>capa[5]-300 :
+                            player.duration_bullet=self.ticks-capa[5]+300
+                        player.ice_pos=(bullet.rect.x-self.block/2, bullet.rect.y-self.block/2)
+                if player.canhit :
                     bullet.update()
+                    bullet.draw(self.screen)
                     if player_adv.rect.colliderect(bullet) :
-                        canhit=False
+                        player.canhit=False
+                        
                         player_adv.PV-=capa[1]*player.damage_boost
                         player_adv.i_death=3*self.block
+                        player.ice_pos=(bullet.rect.x-self.block/2, bullet.rect.y-self.block/2)
                         if self.rumb :
                             player_adv.joy.rumble(1,1,1000)
-            else :
-                ice_pos=(bullet.rect.x-self.block/2, bullet.rect.y-self.block/2)
+                        if self.ticks-player.duration_bullet>capa[5]-300 :
+                            player.duration_bullet=self.ticks-capa[5]+300
 
-        bullet.draw(self.screen)
+
+        
             
 
 
@@ -1493,9 +1541,10 @@ class Game :
         while self.running :
             self.event()
             self.update()
+            self.display()
             self.updraw_bullet(self.pers, self.player, self.player2, self.bullet_P1, self.capa)
             self.updraw_bullet(self.pers2, self.player2, self.player, self.bullet_P2, self.capa2)
-            self.display()
+            
             self.clock.tick(FPS)
 
 #setup

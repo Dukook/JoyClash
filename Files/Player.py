@@ -2,19 +2,20 @@ import pygame
 from pygame.math import Vector2
 from os import chdir
 
-chdir("D:\JoyClashV4\Files")
+chdir("Files")
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
-capa={"Hank" : (1320, 210, 0.9, 1.2),
-      "Berry": (1000, 230, 1.1, 1.2),
-      "Surge": (1260, 225, 0.9, 1.3),
-      "Carroje": (1080, 280, 0.8, 1.7),
-      "Popofox": (1150, 155, 1.2, 0.6),
-      "Spookie": (1220, 150, 1.0, 1.0),
-      "Mushy": (1050, 130, 1.05, 1.5),
-      "Bubule": (1400, 200, 0.85, 0.9),
-      "UIIA": (1800, 310, 1.5, 0.65)
+# "nom" : [PV, Damage, speed, bulletspeed, range, spam]
+capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000),
+      "Berry": (1000, 230, 1.1, 1.2, 600, 1800),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 2000),
+      "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400),
+      "Spookie": (1220, 150, 1.0, 1.0, 650, 1900),
+      "Mushy": (1050, 130, 1.05, 1.35, 400, 2100),
+      "Bubule": (1400, 200, 0.85, 0.9, 600, 1700),
+      "UIIA": (1900, 315, 1.7, 0.65, 1300, 1300)
 }
 
 class Player :
@@ -53,6 +54,9 @@ class Player :
         self.ticks=0 
         self.shot_acc=[not not not not False, not True]#lol
         self.canshoot=True
+        self.shooting=False
+        self.duration_bullet=-1000
+        self.ice_pos=(-1000,-1000)
         self.lock=False
         self.death=pygame.transform.scale(pygame.image.load("Images/death.png").convert_alpha(), (18*self.block, 18*self.block))
         self.i_death=0
@@ -95,22 +99,13 @@ class Player :
             self.joy.rumble(1,1,1)
 
         #direction joueur
-        if self.axe_x1>self.zone_morte :
-            self.right=True
-        else :
-            self.right=False
-        if self.axe_x1<-self.zone_morte :
-            self.left=True
-        else :
-            self.left=False
-        if self.axe_y1>self.zone_morte :
-            self.down=True
-        else :
-            self.down=False
-        if self.axe_y1<-self.zone_morte :
-            self.up=True
-        else :
-            self.up=False
+        self.right=bool(self.axe_x1>self.zone_morte)
+
+        self.left=bool(self.axe_x1<-self.zone_morte)
+
+        self.down=bool(self.axe_y1>self.zone_morte)
+
+        self.up=bool(self.axe_y1<-self.zone_morte)
 
         
         #recharge stamina plus élevé si le joueur ne bouge pas
@@ -130,10 +125,7 @@ class Player :
                 self.stamina+=self.stamina_speed
                 if self.stamina>5000 :
                     self.stamina=5000
-        if self.stamina<20 :
-            self.can=False
-        elif self.stamina>=1000 :
-            self.can=True
+        self.can=bool(self.stamina>=1000)
         
 
         #variation de vitesse
@@ -161,16 +153,9 @@ class Player :
 
         #shoot
         if shoot and self.canshoot and self.ajusted_angle!=None:
-            if lock :
-                self.shot_acc=[True, True]
-            else :
-                self.shot_acc=[True, False]
+            self.shot_acc=[True, lock]
 
-        if lock and self.ajusted_angle!=None :
-            self.lock=True#pas envie de changer la variable un peu partout
-            self.vise2=pygame.transform.rotozoom(self.vise, self.ajusted_angle, 1)
-        else :
-            self.lock=False
+        self.lock=bool(self.ajusted_angle!=None and lock)
             
         #les print qui carry
         '''if self.j==0 :
@@ -224,8 +209,9 @@ class Player :
     def drawstuff(self, screen):
         #la visée
         if self.lock :
-            len_de_la_rotation_qui_clc_dans_pygame=[self.vise2.get_width(), self.vise2.get_height()]
-            screen.blit(self.vise2, (self.rect.x-len_de_la_rotation_qui_clc_dans_pygame[0]/2+self.block/2,self.rect.y-len_de_la_rotation_qui_clc_dans_pygame[1]/2+self.block/2))
+            self.vise2=pygame.transform.rotate(self.vise, self.ajusted_angle)
+            l_v=[self.vise2.get_width(), self.vise2.get_height()]
+            screen.blit(self.vise2, (self.rect.x-l_v[0]/2+self.block/2,self.rect.y-l_v[1]/2+self.block/2))
 
         #mort
         screen.blit(self.death, self.pos_death)
