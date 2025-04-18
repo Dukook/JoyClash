@@ -128,11 +128,10 @@ class Menu :
 
         
         
-        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2=False, False, False, False, False, False, False, False, False#bcp de can
+        self.canback1, self.canback2, self.cannext1, self.cannext2, self.canchange_map, self.cansettings, self.canrumb, self.canplay1, self.canplay2, self.can_swapp=False, False, False, False, False, False, False, False, False, False#bcp de can
         
 
         #sons
-        
         pygame.mixer.music.load("Songs/loby.mp3")
         pygame.mixer.music.set_volume(self.son/100)
         pygame.mixer.music.play()
@@ -234,21 +233,56 @@ class Menu :
             self.purchase2=self.joy2.get_button(1)
             change_map=self.joy1.get_button(0)
             UIIA=pygame.key.get_pressed()
-            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] :
+            vibr=self.joy1.get_button(2)
+            vibr2=self.joy2.get_button(2)
+            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
+                self.can_swapp=False
                 global nb_pers
-                nb_pers=9
+                if nb_pers==8 :
+                    nb_pers=9
+                else :
+                    nb_pers=8
+                    if self.pick1==8 :
+                        self.pick1=0
+                        if self.pick1==self.pick2 :
+                            self.pick1+=1
+                    elif self.pick2==8 :
+                        self.pick2=0
+                        if self.pick1==self.pick2 :
+                            self.pick2+=1
+
+            if not UIIA[pygame.K_SPACE]:
+                self.can_swapp=True
 
             if self.srumb :
-                vibr=self.joy1.get_button(2)
-                vibr2=self.joy2.get_button(2)
+                
 
                 if vibr :
                     self.joy1.rumble(1,1,1)
+                    
 
                 if vibr2 :
                     self.joy2.rumble(1,1,1)
-
-            if self.purchase1 or self.play1 :
+                    
+                    
+            if vibr :
+                self.pick1=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick1+=1
+                if self.pick1>=nb_pers :
+                    self.pick1=0
+                    if self.pick1==self.pick2 :
+                        self.pick1+=1
+            if vibr2 :
+                self.pick2=randint(0, nb_pers-1)
+                if self.pick1==self.pick2 :
+                    self.pick2-=1
+                if self.pick2<0 :
+                    self.pick2=nb_pers-1
+                    if self.pick1==self.pick2 :
+                        self.pick2-=1
+                
+            if self.purchase1 or self.play1 or vibr :
                 pass
             else :
 
@@ -297,7 +331,7 @@ class Menu :
                 elif not change_map :
                     self.canchange_map=True
 
-            if self.purchase2 or self.play2 :
+            if self.purchase2 or self.play2 or vibr2 :
                 pass
             else :
 
@@ -786,6 +820,7 @@ class Game :
         #importation du song
         self.son=sett[2]/100
         pygame.mixer.music.stop()
+                   
         pygame.mixer.music.load("Songs/321.mp3")
         pygame.mixer.music.set_volume(self.son)
         pygame.mixer.music.play()
@@ -879,7 +914,10 @@ class Game :
                 self.clock.tick(1)
                 
             self.plan="play"
-            pygame.mixer.music.load("Songs/Trophy.mp3")
+            if self.pers=="UIIA" or self.pers2=="UIIA" :
+                pygame.mixer.music.load("Songs/UIIA.mp3")
+            else :
+                pygame.mixer.music.load("Songs/Trophy.mp3")
             pygame.mixer.music.play()
 
         elif self.plan == "play" :
