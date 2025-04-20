@@ -6,10 +6,10 @@ from Account import Choice, Write
 
 
 
-info_P1, pseudo_P1=Choice(1)
-info_P2, pseudo_P2=Choice(2)
-"""info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'"""
+"""info_P1, pseudo_P1=Choice(1)
+info_P2, pseudo_P2=Choice(2)"""
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
@@ -18,7 +18,7 @@ pygame.init()
 
 
 
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "UIIA"]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "UIIA"]
 # "nom" : [PV, Damage, speed, bullettime&speed]
 capa={"Hank" : (1320, 210, 0.9, 1.2),
       "Berry": (1000, 230, 1.1, 1.2),
@@ -28,9 +28,10 @@ capa={"Hank" : (1320, 210, 0.9, 1.2),
       "Spookie": (1220, 150, 1.0, 1.0),
       "Mushy": (1050, 130, 1.05, 1.5),
       "Bubule": (1400, 200, 0.85, 0.9),
+      "Chick'n bob": (950, 37, 1.0, 0.9),
       "UIIA": (1800, 310, 1.5, 0.65)
 }
-nb_pers=8
+nb_pers=9
 
 FPS=45
 sett=[]
@@ -67,6 +68,7 @@ class Menu :
         self.spookie=pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285))
         self.mushy=pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285))
         self.bubule=pygame.transform.scale(pygame.image.load("Images/f_bubule.png").convert_alpha(), (240,285))
+        self.chick=pygame.transform.scale(pygame.image.load("Images/f_chick'n bob.png").convert_alpha(), (240,285))
         self.UIIA=pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285))
 
         #autres images
@@ -238,15 +240,15 @@ class Menu :
             if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
                 self.can_swapp=False
                 global nb_pers
-                if nb_pers==8 :
-                    nb_pers=9
+                if nb_pers==9 :
+                    nb_pers=10
                 else :
-                    nb_pers=8
-                    if self.pick1==8 :
+                    nb_pers=9
+                    if self.pick1==9 :
                         self.pick1=0
                         if self.pick1==self.pick2 :
                             self.pick1+=1
-                    elif self.pick2==8 :
+                    elif self.pick2==9 :
                         self.pick2=0
                         if self.pick1==self.pick2 :
                             self.pick2+=1
@@ -522,6 +524,8 @@ class Menu :
                 self.screen.blit(self.mushy, (136, 133))
             elif pers[self.pick1]=="Bubule":
                 self.screen.blit(self.bubule, (136, 133))
+            elif pers[self.pick1]=="Chick'n bob":
+                self.screen.blit(self.chick, (136, 133))
             elif pers[self.pick1]=="UIIA":
                 self.screen.blit(self.UIIA, (136, 133))
 
@@ -542,6 +546,8 @@ class Menu :
                 self.screen.blit(self.mushy, (426, 133))
             elif pers[self.pick2]=="Bubule":
                 self.screen.blit(self.bubule, (426, 133))
+            elif pers[self.pick2]=="Chick'n bob":
+                self.screen.blit(self.chick, (426, 133))
             elif pers[self.pick2]=="UIIA":
                 self.screen.blit(self.UIIA, (426, 133))
 
@@ -834,6 +840,7 @@ class Game :
         self.spookie=pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285))
         self.mushy=pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285))
         self.bubule=pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285))
+        self.chick=pygame.transform.scale(pygame.image.load("Images/f_chick'n bob.png").convert_alpha(), (240,285))
         self.UIIA=pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285))
 
         self.down=pygame.transform.scale(pygame.image.load("Images/down.png").convert_alpha(), (self.block/2,self.block/2))
@@ -856,6 +863,8 @@ class Game :
             self.draw=self.mushy
         elif self.pers=="Bubule" :
             self.draw=self.bubule
+        elif self.pers=="Chick'n bob" :
+            self.draw=self.chick
         elif self.pers=="UIIA" :
             self.draw=self.UIIA
 
@@ -876,6 +885,8 @@ class Game :
             self.draw2=self.mushy
         elif self.pers2=="Bubule" :
             self.draw2=self.bubule
+        elif self.pers2=="Chick'n bob" :
+            self.draw2=self.chick
         elif self.pers2=="UIIA" :
             self.draw2=self.UIIA
         
@@ -1131,7 +1142,11 @@ class Game :
                         self.bullet.update()
                         if self.player2.rect.colliderect(self.bullet) and self.canhit:
                             self.canhit=False
-                            self.player2.PV-=self.capa[1]*self.damage_boost
+                            if self.pers!="Chick'n bob" :
+                                self.player2.PV-=self.capa[1]*self.damage_boost
+                            else :
+                                percent=min(max((self.ticks - self.shooting[1])/(self.diff_ticks*self.capa[3])+10/100, 20/100),1)*37/100
+                                self.player2.PV-=percent*self.capa2[0]*self.damage_boost
                             self.player2.i_death=3*self.block
                             if self.rumb :
                                 self.player2.joy.rumble(1,1,1000)
@@ -1169,7 +1184,11 @@ class Game :
                         self.bullet2.update()
                         if self.player.rect.colliderect(self.bullet2) and self.canhit2:
                             self.canhit2=False
-                            self.player.PV-=self.capa2[1]*self.damage_boost2
+                            if self.pers2!="Chick'n bob" :
+                                self.player.PV-=self.capa2[1]*self.damage_boost2
+                            else :
+                                percent=min(max((self.ticks - self.shooting2[1])/(self.diff_ticks*self.capa2[3])+10/100, 20/100),1)*37/100
+                                self.player.PV-=percent*self.capa[0]*self.damage_boost2
                             self.player.i_death=3*self.block
                             if self.rumb :
                                 self.player.joy.rumble(1,1,1000)
@@ -1493,7 +1512,7 @@ while running :
 
     if play :
         WIDTH, HEIGHT = sett[3], sett[4]
-        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
         game=Game(screen)
         game.run()
     else :
