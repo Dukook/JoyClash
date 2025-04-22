@@ -8,15 +8,17 @@ font = pygame.font.Font("Others/arial.ttf", 20)
 
 
 # "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
-capa={"Hank" : (1320, 210, 0.9, 1.2, 700, 2000, 6),
+capa={"Hank" : (1320, 210, 0.9, 1.2,700, 2000, 6),
       "Berry": (1000, 230, 1.1, 1.2, 600, 1800, 5),
       "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 4),
-      "Carroje": (1080, 280, 0.8, 1.6, 1200, 1600, 4),
-      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 15),
+      "Carroje": (1080, 280, 0.8, 1.7, 1200, 1600, 4),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 30),
       "Spookie": (1220, 150, 1.0, 1.0, 650, 1900, 5),
-      "Mushy": (1050, 130, 1.05, 1.35, 400, 2100, 8),
+      "Mushy": (1050, 130, 1.05, 1.5, 400, 2100, 8),
       "Bubule": (1400, 200, 0.85, 0.9, 600, 1700, 10),
-      "UIIA": (1900, 315, 1.7, 0.65, 1300, 1300, 69)
+      "Chick'n bob": (950, 37, 1.0, 0.9, 500, 1700, 7),
+      "Owleaf": (1300, 170, 1.1, 1.1, 650, 2050, 3),
+      "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
 class Player :
@@ -33,7 +35,7 @@ class Player :
         self.rect=self.image.get_rect(x=x,y=y)
 
         self.vise=pygame.image.load("Images/vise3.png").convert_alpha()
-        self.vise=pygame.transform.scale(self.vise, (self.capa[4]*self.block*0.03,10*self.block))
+        self.vise=pygame.transform.scale(self.vise, ((self.capa[4]*self.block)/self.capa[3]*0.032,10*self.block))
 
         
 
@@ -60,6 +62,7 @@ class Player :
         self.shooting=False
         self.canhit=True
         self.hitwall=False
+        self.explosion=True
         self.duration_bullet=-1000
         self.time_effect=-1000
         
