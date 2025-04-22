@@ -17,7 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "UIIA"]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed,skin,  range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 2000, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1800, 5),
@@ -28,12 +28,15 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Mushy": (1050, 130, 1.05, 1.5, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 400, 2100, 8),
       "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285)), 600, 1700, 10),
       "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1700, 7),
-      "Owleaf": (1300, 170, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 2050, 3),
+      "Owleaf": (1300, 170, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 2050, 3),
+      "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1800, 5),
+      "Reko amigo": (1375, 200, 1.0, 1.8, pygame.transform.scale(pygame.image.load("Images/f_Reko amigo.png").convert_alpha(), (240,285)), 750, 2000, 8),
+      "Furbok": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 700, 2800, 2),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
 
 berry_heal=50
-nb_pers=10
+nb_pers=11
 nb_pers_base=nb_pers
 
 FPS=45
@@ -1083,7 +1086,7 @@ class Game :
                 player.shot_acc[0]=False
                 player.canshoot=False
                 player.shooting=True
-                
+                player.range=0
                 player.hitwall=False
                 if pers!="Owleaf" :
                     bullet.settings(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
@@ -1097,7 +1100,7 @@ class Game :
 
             if self.ticks-player.duration_bullet>capa[6] :
                 player.canshoot=True
-            elif self.ticks-player.duration_bullet>capa[5] :
+            elif self.ticks-player.duration_bullet>capa[5]+player.range :
                 player.shooting=False
 
 
@@ -1361,6 +1364,7 @@ class Game :
                                         player_adv.PV-=capa[1]*player.damage_boost*1.25
                                     else :
                                         player_adv.PV-=capa[1]*player.damage_boost
+                                        player.ammo+=1
 
             elif pers=="UIIA" :
                 if player.shooting :
@@ -1388,6 +1392,39 @@ class Game :
                         player_adv.joy.rumble(1,1,1)
                 else :
                     player_adv.modif=1
+
+            elif pers=="Squeak" :
+                if player.shooting :
+                    bullet.updatex()
+                    collision=False
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            collision=True
+                    if collision :
+                        bullet.x=-bullet.x
+                        bullet.updatex()
+                        player.range=min(player.range+50, 500)
+                    
+                    bullet.updatey()
+                    collision=False
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            collision=True
+                    if collision :
+                        bullet.y=-bullet.y
+                        bullet.updatey()
+                        player.range=min(player.range+50, 500)
+                    
+                    if not player.hitwall :
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
 
 
 

@@ -18,6 +18,7 @@ capa={"Hank" : (1320, 210, 0.9, 1.2,700, 2000, 6),
       "Bubule": (1400, 200, 0.85, 0.9, 600, 1700, 10),
       "Chick'n bob": (950, 37, 1.0, 0.9, 500, 1700, 7),
       "Owleaf": (1300, 170, 1.1, 1.1, 650, 2050, 3),
+      "Squeak": (1350, 180, 0.9, 1.0, 800, 1800, 5),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
@@ -35,7 +36,7 @@ class Player :
         self.rect=self.image.get_rect(x=x,y=y)
 
         self.vise=pygame.image.load("Images/vise3.png").convert_alpha()
-        self.vise=pygame.transform.scale(self.vise, ((self.capa[4]*self.block)/self.capa[3]*0.032,10*self.block))
+        self.vise=pygame.transform.scale(self.vise, ((self.capa[4]*self.block)*0.032/self.capa[3],10*self.block))
 
         
 
@@ -63,6 +64,7 @@ class Player :
         self.canhit=True
         self.hitwall=False
         self.explosion=True
+        self.range=0
         self.duration_bullet=-1000
         self.time_effect=-1000
         

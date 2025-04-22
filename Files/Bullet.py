@@ -59,6 +59,12 @@ class Bullet :
                 temprect.x+=self.x[x]
                 temprect.y+=self.y[x]
                 self.rect[x]=temprect
+
+    def updatex(self) :
+        self.rect.x+=self.x
+
+    def updatey(self) :
+        self.rect.y+=self.y
         
 
     def draw(self, screen):
