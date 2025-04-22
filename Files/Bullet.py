@@ -6,11 +6,16 @@ class Bullet :
     def __init__(self, brawleur, block, speed):
         self.block=block
         self.speed=speed
-        self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
-        self.rect=self.image.get_rect(x=-10000, y=-10000)
-
-        scaling=(block/2)/(self.image.get_height())
-        self.image=pygame.transform.scale_by(self.image, scaling)
+        if brawleur!="Owleaf" :
+            self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
+            scaling=(block/2)/(self.image.get_height())
+            self.image=pygame.transform.scale_by(self.image, scaling)
+            
+        else :
+            self.image=[]
+            scaling=(block/2)/(pygame.image.load(f"Images/a_{brawleur}_0.png").convert_alpha().get_height())
+            for x in range(3) :
+                self.image.append(pygame.transform.scale_by(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), scaling))
 
     def settings(self, x, y, angle, acc) :
 
