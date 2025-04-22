@@ -78,7 +78,7 @@ def Create(j) :
             pseudo=input("\nPassword too short or too long (5 to 20 characters),\nUse 'exit' to go back to main menu,\nOr choose an other one\n\n - ")
         else :
             new_acc=open(f'Saves/{pseudo}.txt','w')
-            new_acc.write(f"{password}\n0\nTrue\nTrue\nTrue\nFalse\nFalse\nFalse\nFalse\nFalse\nTrue\n")
+            new_acc.write(f"{password}\n0\nTrue\nTrue\nTrue\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nTrue\n")
             new_acc.close()
             print(f"\nCongratulation {pseudo} your account has benn created !\n")
             print(f"\nPlayer {j} succesfully connected !")
@@ -93,7 +93,7 @@ def Write(pseudo, pers, coin) :
     new_coin+=coin
     if pers !=None :
         info[pers]=True
-    final.write(f"{info[0]}\n{new_coin}\n{info[2]}\n{info[3]}\n{info[4]}\n{info[5]}\n{info[6]}\n{info[7]}\n{info[8]}\n{info[9]}\n{info[10]}\n")
+    final.write(f"{info[0]}\n{new_coin}\n{info[2]}\n{info[3]}\n{info[4]}\n{info[5]}\n{info[6]}\n{info[7]}\n{info[8]}\n{info[9]}\n{info[10]}\n{info[11]}\n{info[12]}\n")
     final.close()
     info=lire(pseudo)
     return info, pseudo

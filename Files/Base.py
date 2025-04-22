@@ -8,30 +8,32 @@ from Account import Choice, Write
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
 
 pygame.init()
+screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 
-
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "UIIA"]
-# "nom" : [PV, Damage, speed, bullettime&speed]
-capa={"Hank" : (1320, 210, 0.9, 1.2),
-      "Berry": (1000, 230, 1.1, 1.2),
-      "Surge": (1260, 225, 0.9, 1.3),
-      "Carroje": (1080, 280, 0.8, 1.7),
-      "Popofox": (1150, 155, 1.2, 0.6),
-      "Spookie": (1220, 150, 1.0, 1.0),
-      "Mushy": (1050, 130, 1.05, 1.5),
-      "Bubule": (1400, 200, 0.85, 0.9),
-      "Chick'n bob": (950, 37, 1.0, 0.9),
-      "UIIA": (1800, 310, 1.5, 0.65)
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "UIIA"]
+# "nom" : [PV, Damage, speed, bullettime&speed, skin]
+capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285))),
+      "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285))),
+      "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285))),
+      "Carroje": (1080, 280, 0.8, 1.7, pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285))),
+      "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285))),
+      "Spookie": (1220, 150, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285))),
+      "Mushy": (1050, 130, 1.05, 1.5, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285))),
+      "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285))),
+      "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285))),
+      "Owleaf": (1300, 170, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285))),
+      "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)))
 }
-nb_pers=9
+
+nb_pers=10
 
 FPS=45
 sett=[]
@@ -59,17 +61,6 @@ class Menu :
         self.gSL=pygame.image.load("Images/gSL2.png").convert_alpha()
         self.gSR=pygame.image.load("Images/gSR2.png").convert_alpha()
 
-        #images perso
-        self.hank=pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285))
-        self.berry=pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285))
-        self.surge=pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285))
-        self.carroje=pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285))
-        self.popofox=pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285))
-        self.spookie=pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285))
-        self.mushy=pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285))
-        self.bubule=pygame.transform.scale(pygame.image.load("Images/f_bubule.png").convert_alpha(), (240,285))
-        self.chick=pygame.transform.scale(pygame.image.load("Images/f_chick'n bob.png").convert_alpha(), (240,285))
-        self.UIIA=pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285))
 
         #autres images
         self.cross=pygame.transform.scale_by(pygame.image.load("Images/cross.png").convert_alpha(), 0.48)
@@ -240,15 +231,15 @@ class Menu :
             if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
                 self.can_swapp=False
                 global nb_pers
-                if nb_pers==9 :
-                    nb_pers=10
+                if nb_pers==10 :
+                    nb_pers=11
                 else :
-                    nb_pers=9
-                    if self.pick1==9 :
+                    nb_pers=10
+                    if self.pick1==10 :
                         self.pick1=0
                         if self.pick1==self.pick2 :
                             self.pick1+=1
-                    elif self.pick2==9 :
+                    elif self.pick2==10 :
                         self.pick2=0
                         if self.pick1==self.pick2 :
                             self.pick2+=1
@@ -507,49 +498,11 @@ class Menu :
             self.gSR2=pygame.transform.scale(self.gSR, self.len_gSR)
             self.screen.blit(self.gSR2, (650-self.len_gSR[0]//2,96-self.len_gSR[1]//2))
 
-            #perso P1
-            if pers[self.pick1]=="Hank":
-                self.screen.blit(self.hank, (136, 133))
-            elif pers[self.pick1]=="Berry":
-                self.screen.blit(self.berry, (136, 133))
-            elif pers[self.pick1]=="Surge":
-                self.screen.blit(self.surge, (136, 133))
-            elif pers[self.pick1]=="Carroje":
-                self.screen.blit(self.carroje, (136, 133))
-            elif pers[self.pick1]=="Popofox":
-                self.screen.blit(self.popofox, (136, 133))
-            elif pers[self.pick1]=="Spookie":
-                self.screen.blit(self.spookie, (136, 133))
-            elif pers[self.pick1]=="Mushy":
-                self.screen.blit(self.mushy, (136, 133))
-            elif pers[self.pick1]=="Bubule":
-                self.screen.blit(self.bubule, (136, 133))
-            elif pers[self.pick1]=="Chick'n bob":
-                self.screen.blit(self.chick, (136, 133))
-            elif pers[self.pick1]=="UIIA":
-                self.screen.blit(self.UIIA, (136, 133))
+            perspick=capa[pers[self.pick1]]
+            self.screen.blit(perspick[4], (136, 133))
 
-            #perso 2 (x+290)    
-            if pers[self.pick2]=="Hank":
-                self.screen.blit(self.hank, (426, 133))
-            elif pers[self.pick2]=="Berry":
-                self.screen.blit(self.berry, (426, 133))
-            elif pers[self.pick2]=="Surge":
-                self.screen.blit(self.surge, (426, 133))
-            elif pers[self.pick2]=="Carroje":
-                self.screen.blit(self.carroje, (426, 133))
-            elif pers[self.pick2]=="Popofox":
-                self.screen.blit(self.popofox, (426, 133))
-            elif pers[self.pick2]=="Spookie":
-                self.screen.blit(self.spookie, (426, 133))
-            elif pers[self.pick2]=="Mushy":
-                self.screen.blit(self.mushy, (426, 133))
-            elif pers[self.pick2]=="Bubule":
-                self.screen.blit(self.bubule, (426, 133))
-            elif pers[self.pick2]=="Chick'n bob":
-                self.screen.blit(self.chick, (426, 133))
-            elif pers[self.pick2]=="UIIA":
-                self.screen.blit(self.UIIA, (426, 133))
+            perspick=capa[pers[self.pick2]]
+            self.screen.blit(perspick[4], (426, 133))
 
             #perso non débloqués
             if not self.canplay1 :
@@ -832,63 +785,15 @@ class Game :
         pygame.mixer.music.play()
 
         #pers
-        self.hank=pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285))
-        self.berry=pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285))
-        self.surge=pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285))
-        self.carroje=pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285))
-        self.popofox=pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285))
-        self.spookie=pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285))
-        self.mushy=pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285))
-        self.bubule=pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285))
-        self.chick=pygame.transform.scale(pygame.image.load("Images/f_chick'n bob.png").convert_alpha(), (240,285))
-        self.UIIA=pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285))
 
         self.down=pygame.transform.scale(pygame.image.load("Images/down.png").convert_alpha(), (self.block/2,self.block/2))
 
 
 
-        if self.pers=="Hank" :
-            self.draw=self.hank
-        elif self.pers=="Berry" :
-            self.draw=self.berry
-        elif self.pers=="Surge" :
-            self.draw=self.surge
-        elif self.pers=="Carroje" :
-            self.draw=self.carroje
-        elif self.pers=="Popofox" :
-            self.draw=self.popofox
-        elif self.pers=="Spookie" :
-            self.draw=self.spookie
-        elif self.pers=="Mushy" :
-            self.draw=self.mushy
-        elif self.pers=="Bubule" :
-            self.draw=self.bubule
-        elif self.pers=="Chick'n bob" :
-            self.draw=self.chick
-        elif self.pers=="UIIA" :
-            self.draw=self.UIIA
 
+        self.draw=self.capa[4]
 
-        if self.pers2=="Hank" :
-            self.draw2=self.hank
-        elif self.pers2=="Berry" :
-            self.draw2=self.berry
-        elif self.pers2=="Surge" :
-            self.draw2=self.surge
-        elif self.pers2=="Carroje" :
-            self.draw2=self.carroje
-        elif self.pers2=="Popofox" :
-            self.draw2=self.popofox
-        elif self.pers2=="Spookie" :
-            self.draw2=self.spookie
-        elif self.pers2=="Mushy" :
-            self.draw2=self.mushy
-        elif self.pers2=="Bubule" :
-            self.draw2=self.bubule
-        elif self.pers2=="Chick'n bob" :
-            self.draw2=self.chick
-        elif self.pers2=="UIIA" :
-            self.draw2=self.UIIA
+        self.draw2=self.capa2[4]
         
 
         self.light=pygame.transform.rotozoom(pygame.image.load("Images/light.png").convert_alpha(), 5, 2)
@@ -945,8 +850,12 @@ class Game :
             if self.player.shot_acc[0] :
                 self.player.canshoot = False
                 self.canshot=False
-                self.canhit=True
-                self.bullet.settings(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.player.shot_acc[1])
+                if self.pers=="Owleaf" :
+                    self.bullet.settings_owl(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.player.shot_acc[1])
+                    self.canhitowl=[True, True, True]
+                else :
+                    self.bullet.settings(self.player.rect.x, self.player.rect.y, self.player.ajusted_angle, self.player.shot_acc[1])
+                    self.canhit=True
                 self.player.shot_acc=[False, False]
                 self.shooting=[True, self.ticks, True]
                 if self.pers=="Spookie" :
@@ -960,9 +869,13 @@ class Game :
 
             if self.player2.shot_acc[0] :
                 self.player2.canshoot = False
-                self.canshot2=False
-                self.canhit2=True
-                self.bullet2.settings(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.player2.shot_acc[1])
+                self.canshot2=False                
+                if self.pers2=="Owleaf" :
+                    self.bullet2.settings_owl(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.player2.shot_acc[1])
+                    self.canhitowl2=[True, True, True]
+                else :
+                    self.bullet2.settings(self.player2.rect.x, self.player2.rect.y, self.player2.ajusted_angle, self.player2.shot_acc[1])
+                    self.canhit2=True
                 self.player2.shot_acc=[False, False]
                 self.shooting2=[True, self.ticks, True]
                 if self.pers2=="Spookie" :
@@ -1130,88 +1043,153 @@ class Game :
             
             
             if self.shooting[0] :
-                for mur in self.murs :
-                    if mur.colliderect(self.bullet) and not self.pers=="Carroje" and not self.pers=="UIIA" :
+                if self.pers!="Owleaf" :    
+                    for mur in self.murs :
+                        if mur.colliderect(self.bullet) and not self.pers=="Carroje" and not self.pers=="UIIA" :
+                            self.shooting[2]=False
+                            self.shooting[1]=self.ticks-self.diff_ticks*self.capa[3]
+                            if self.pers!="Surge" :
+                                self.player.canshoot=True
+                            
+                    if self.ticks - self.shooting[1] <self.diff_ticks*self.capa[3] :
+                        if self.shooting[2] :
+                            self.bullet.update()
+                            if self.player2.rect.colliderect(self.bullet) and self.canhit:
+                                self.canhit=False
+                                if self.pers!="Chick'n bob" :
+                                    self.player2.PV-=self.capa[1]*self.damage_boost
+                                else :
+                                    percent=min(max((self.ticks - self.shooting[1])/(self.diff_ticks*self.capa[3])+10/100, 20/100),1)*37/100
+                                    self.player2.PV-=percent*self.capa2[0]*self.damage_boost
+                                self.player2.i_death=3*self.block
+                                if self.rumb :
+                                    self.player2.joy.rumble(1,1,1000)
+                                if self.pers=="Hank" :
+                                    self.player.PV+=50
+                                    if self.player.PV>self.capa[0] :
+                                        self.player.PV=self.capa[0]
+                                elif self.pers=="Mushy" :
+                                    self.time_poison=self.ticks
+                                    self.poison_ticks=int(self.time_poison/1000)
+                                elif self.pers=="UIIA" :
+                                    self.time_UIIA=self.ticks
+                    else :
+                        self.player.canshoot=True
+                        if self.pers=="Surge" :
+                            self.player.canshoot=False
+                            self.canshot=True
+                            self.a_surge.settings(self.bullet.rect.x, self.bullet.rect.y)
+                            self.time_surge=self.ticks
+                        elif self.pers=="Berry" :
+                            self.a_berry.settings(self.bullet.rect.x, self.bullet.rect.y)
+                else :
+                    temp=0
+                    for mur in self.murs :
+                        for x in range(len(self.bullet.rect)) :
+                            if mur.colliderect(self.bullet.rect[x]) :
+                                self.bullet.dagues[x]=False
+                                if not self.bullet.dagues[x] and self.shooting[2]:
+                                    temp+=1
+                    if temp>=3 :
                         self.shooting[2]=False
                         self.shooting[1]=self.ticks-self.diff_ticks*self.capa[3]
-                        if self.pers!="Surge" :
-                            self.player.canshoot=True
-                        
-                if self.ticks - self.shooting[1] <self.diff_ticks*self.capa[3] :
-                    if self.shooting[2] :
-                        self.bullet.update()
-                        if self.player2.rect.colliderect(self.bullet) and self.canhit:
-                            self.canhit=False
-                            if self.pers!="Chick'n bob" :
-                                self.player2.PV-=self.capa[1]*self.damage_boost
-                            else :
-                                percent=min(max((self.ticks - self.shooting[1])/(self.diff_ticks*self.capa[3])+10/100, 20/100),1)*37/100
-                                self.player2.PV-=percent*self.capa2[0]*self.damage_boost
-                            self.player2.i_death=3*self.block
-                            if self.rumb :
-                                self.player2.joy.rumble(1,1,1000)
-                            if self.pers=="Hank" :
-                                self.player.PV+=50
-                                if self.player.PV>self.capa[0] :
-                                    self.player.PV=self.capa[0]
-                            elif self.pers=="Mushy" :
-                                self.time_poison=self.ticks
-                                self.poison_ticks=int(self.time_poison/1000)
-                            elif self.pers=="UIIA" :
-                                self.time_UIIA=self.ticks
-                else :
-                    self.player.canshoot=True
-                    if self.pers=="Surge" :
-                        self.player.canshoot=False
-                        self.canshot=True
-                        self.a_surge.settings(self.bullet.rect.x, self.bullet.rect.y)
-                        self.time_surge=self.ticks
-                    elif self.pers=="Berry" :
-                        self.a_berry.settings(self.bullet.rect.x, self.bullet.rect.y)
+                    if self.ticks - self.shooting[1] <self.diff_ticks*self.capa[3] :
+                        if self.shooting[2] :
+                            self.bullet.updateowl()
+                            for x in range(len(self.bullet.rect)) :
+                                if self.bullet.dagues[x] :
+                                    if self.player2.rect.colliderect(self.bullet.rect[x]) and self.canhitowl[x]:
+                                        self.canhitowl[x]=False
+                                        self.player2.i_death=3*self.block
+                                        if self.rumb :
+                                            self.player2.joy.rumble(1,1,1000)    
+                                        if self.bullet.power[x]==0 :
+                                            self.player.PV+=self.capa[1]*self.damage_boost*0.2
+                                            self.player2.PV-=self.capa[1]*self.damage_boost
+                                        elif self.bullet.power[x]==2 :
+                                            self.player2.PV-=self.capa[1]*self.damage_boost*1.25
+                                        else :
+                                            self.player2.PV-=self.capa[1]*self.damage_boost
+                    
+                    else :
+                        self.player.canshoot=True
 
             
             
             if self.shooting2[0] :
-                for mur in self.murs :
-                    if mur.colliderect(self.bullet2) and not self.pers2=="Carroje" and not self.pers2=="UIIA" :
+                if self.pers2!="Owleaf" :
+                    for mur in self.murs :
+                        if mur.colliderect(self.bullet2) and not self.pers2=="Carroje" and not self.pers2=="UIIA" :
+                            self.shooting2[2]=False
+                            self.shooting2[1]=self.ticks-self.diff_ticks*self.capa2[3]
+                            if self.pers2!="Surge" :
+                                self.player2.canshoot=True
+                            
+                    if self.ticks - self.shooting2[1] <self.diff_ticks*self.capa2[3] :
+                        if self.shooting2[2] :
+                            self.bullet2.update()
+                            if self.player.rect.colliderect(self.bullet2) and self.canhit2:
+                                self.canhit2=False
+                                if self.pers2!="Chick'n bob" :
+                                    self.player.PV-=self.capa2[1]*self.damage_boost2
+                                else :
+                                    percent=min(max((self.ticks - self.shooting2[1])/(self.diff_ticks*self.capa2[3])+10/100, 20/100),1)*37/100
+                                    self.player.PV-=percent*self.capa[0]*self.damage_boost2
+                                self.player.i_death=3*self.block
+                                if self.rumb :
+                                    self.player.joy.rumble(1,1,1000)
+                                if self.pers2=="Hank" :
+                                    self.player2.PV+=50
+                                    if self.player2.PV>self.capa2[0] :
+                                        self.player2.PV=self.capa2[0]
+                                elif self.pers2=="Mushy" :
+                                    self.time_poison=self.ticks
+                                    self.poison_ticks=int(self.time_poison/1000)
+                                elif self.pers2=="UIIA" :
+                                    self.time_UIIA=self.ticks
+                            
+                            
+                    else :
+                        self.player2.canshoot=True
+                        if self.pers2=="Surge" : #pas besoin de mettre surge2 car in n'y as pas de doublons
+                            self.player2.canshoot=False
+                            self.canshot2=True
+                            self.a_surge.settings(self.bullet2.rect.x, self.bullet2.rect.y)
+                            self.time_surge=self.ticks
+                        elif self.pers2=="Berry" :
+                            self.a_berry.settings(self.bullet2.rect.x, self.bullet2.rect.y)
+
+                else :
+                    temp=0
+                    for mur in self.murs :
+                        for x in range(len(self.bullet2.rect)) :
+                            if mur.colliderect(self.bullet2.rect[x]) :
+                                self.bullet2.dagues[x]=False
+                                if not self.bullet2.dagues[x] and self.shooting2[2]:
+                                    temp+=1
+                    if temp>=3 :
                         self.shooting2[2]=False
                         self.shooting2[1]=self.ticks-self.diff_ticks*self.capa2[3]
-                        if self.pers2!="Surge" :
-                            self.player2.canshoot=True
-                        
-                if self.ticks - self.shooting2[1] <self.diff_ticks*self.capa2[3] :
-                    if self.shooting2[2] :
-                        self.bullet2.update()
-                        if self.player.rect.colliderect(self.bullet2) and self.canhit2:
-                            self.canhit2=False
-                            if self.pers2!="Chick'n bob" :
-                                self.player.PV-=self.capa2[1]*self.damage_boost2
-                            else :
-                                percent=min(max((self.ticks - self.shooting2[1])/(self.diff_ticks*self.capa2[3])+10/100, 20/100),1)*37/100
-                                self.player.PV-=percent*self.capa[0]*self.damage_boost2
-                            self.player.i_death=3*self.block
-                            if self.rumb :
-                                self.player.joy.rumble(1,1,1000)
-                            if self.pers2=="Hank" :
-                                self.player2.PV+=50
-                                if self.player2.PV>self.capa2[0] :
-                                    self.player2.PV=self.capa2[0]
-                            elif self.pers2=="Mushy" :
-                                self.time_poison=self.ticks
-                                self.poison_ticks=int(self.time_poison/1000)
-                            elif self.pers2=="UIIA" :
-                                self.time_UIIA=self.ticks
-                        
-                        
-                else :
-                    self.player2.canshoot=True
-                    if self.pers2=="Surge" : #pas besoin de mettre surge2 car in n'y as pas de doublons
-                        self.player2.canshoot=False
-                        self.canshot2=True
-                        self.a_surge.settings(self.bullet2.rect.x, self.bullet2.rect.y)
-                        self.time_surge=self.ticks
-                    elif self.pers2=="Berry" :
-                        self.a_berry.settings(self.bullet2.rect.x, self.bullet2.rect.y)
+                    if self.ticks - self.shooting2[1] <self.diff_ticks*self.capa2[3] :
+                        if self.shooting2[2] :
+                            self.bullet2.updateowl()
+                            for x in range(len(self.bullet2.rect)) :
+                                if self.bullet2.dagues[x] :
+                                    if self.player.rect.colliderect(self.bullet2.rect[x]) and self.canhitowl2[x]:
+                                        self.canhitowl2[x]=False
+                                        self.player.i_death=3*self.block
+                                        if self.rumb :
+                                            self.player.joy.rumble(1,1,1000)     
+                                        if self.bullet2.power[x]==0 :
+                                            self.player2.PV+=self.capa2[1]*self.damage_boost2*0.2
+                                            self.player.PV-=self.capa2[1]*self.damage_boost2
+                                        elif self.bullet2.power[x]==2 :
+                                            self.player.PV-=self.capa2[1]*self.damage_boost2*1.25
+                                        else :
+                                            self.player.PV-=self.capa2[1]*self.damage_boost2
+                    
+                    else :
+                        self.player2.canshoot=True
 
             #explosion de surge
 
@@ -1425,7 +1403,10 @@ class Game :
             if self.shooting[0] :
                 if self.ticks - self.shooting[1] <self.diff_ticks*self.capa[3] :
                     if self.shooting[2] :
-                        self.bullet.draw(self.screen)
+                        if self.pers!="Owleaf" :
+                            self.bullet.draw(self.screen)
+                        else :
+                            self.bullet.drawowl(self.screen)
                 else :
                     self.player.canshoot=True
                     self.shooting[0]=False
@@ -1435,7 +1416,10 @@ class Game :
             if self.shooting2[0] :
                 if self.ticks - self.shooting2[1] <self.diff_ticks*self.capa2[3] :
                     if self.shooting2[2] :
-                        self.bullet2.draw(self.screen)
+                        if self.pers2!="Owleaf" :
+                            self.bullet2.draw(self.screen)
+                        else :
+                            self.bullet2.drawowl(self.screen)
                 else :
                     self.player2.canshoot=True
                     self.shooting2[0]=False
