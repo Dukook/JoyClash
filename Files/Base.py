@@ -34,6 +34,7 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
 }
 
 nb_pers=10
+nb_pers_base=nb_pers
 
 FPS=45
 sett=[]
@@ -231,15 +232,15 @@ class Menu :
             if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
                 self.can_swapp=False
                 global nb_pers
-                if nb_pers==10 :
-                    nb_pers=11
+                if nb_pers==nb_pers_base :
+                    nb_pers+=1
                 else :
-                    nb_pers=10
-                    if self.pick1==10 :
+                    nb_pers=nb_pers_base
+                    if self.pick1==nb_pers_base : #car l'indice est moins 1 par rapport au nb mais plus 1par rapport au max sans UIIA
                         self.pick1=0
                         if self.pick1==self.pick2 :
                             self.pick1+=1
-                    elif self.pick2==10 :
+                    elif self.pick2==nb_pers_base :
                         self.pick2=0
                         if self.pick1==self.pick2 :
                             self.pick2+=1
