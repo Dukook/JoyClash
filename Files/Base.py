@@ -1368,11 +1368,6 @@ class Game :
 
             elif pers=="UIIA" :
                 if player.shooting :
-                    for mur in self.murs :
-                        if mur.colliderect(bullet) :
-                            player.shooting=False
-                            player.hitwall=True
-                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
                     if not player.hitwall :
                         bullet.update()
                         bullet.draw(self.screen)
