@@ -193,7 +193,7 @@ class Menu :
                 self.color_ss=["white","yellow","white",]
 
             if high :
-                self.WIDTH,self.HEIGHT = 2550, 1440
+                self.WIDTH,self.HEIGHT = 2560, 1440
                 self.color_ss=["yellow","white","white",]
 
             if rumb and self.canrumb:
