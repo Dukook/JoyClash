@@ -389,7 +389,7 @@ class Menu :
                 self.len_gSR=(38,38)
 
             
-            actual_pick=(self.pick1+2)%nb_pers
+            actual_pick=self.pick1%nb_pers+2
             global info_P1, pseudo_P1
             #print(info_P1, self.canplay1)
             if info_P1==None :
@@ -404,7 +404,7 @@ class Menu :
             else :
                 self.canplay1=True
 
-            actual_pick2=(self.pick2+2)%nb_pers
+            actual_pick2=self.pick2%nb_pers+2
             global info_P2, pseudo_P2
             #print(info_P2, self.canplay2)
             if info_P2==None :
