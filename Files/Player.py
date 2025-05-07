@@ -8,19 +8,19 @@ font = pygame.font.Font("Others/arial.ttf", 20)
 
 
 # "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
-capa={"Hank" : (1320, 210, 0.9, 1.2,700, 2000, 6),
-      "Berry": (1000, 230, 1.1, 1.2, 600, 1800, 5),
-      "Surge": (1260, 225, 0.9, 1.3, 650, 2000, 4),
-      "Carroje": (1080, 280, 0.8, 1.7, 1200, 1600, 4),
-      "Popofox": (1150, 155, 1.2, 0.6, 450, 1400, 30),
-      "Spookie": (1220, 150, 1.0, 1.0, 650, 1900, 5),
-      "Mushy": (1050, 130, 1.05, 1.5, 400, 2100, 8),
-      "Bubule": (1400, 200, 0.85, 0.9, 600, 1700, 10),
-      "Chick'n bob": (950, 37, 1.0, 0.9, 500, 1700, 7),
-      "Owleaf": (1300, 170, 1.1, 1.1, 650, 2050, 3),
-      "Squeak": (1350, 180, 0.9, 1.0, 800, 1800, 5),
-      "Reko amigo": (1375, 200, 1.0, 1.8, 750, 2000, 8),
-      "Furbok": (1500, 310, 0.75, 0.7, 700, 2800, 2),
+capa={"Hank" : (1320, 210, 0.9, 1.2,700, 1300, 6),
+      "Berry": (1000, 230, 1.1, 1.2, 600, 1200, 5),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 1300, 4),
+      "Carroje": (1080, 280, 0.8, 1.7, 1200, 1300, 4),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 700, 30),
+      "Spookie": (1220, 150, 1.0, 1.0, 650, 1400, 5),
+      "Mushy": (1050, 130, 1.05, 1.5, 400, 1450, 8),
+      "Bubule": (1400, 200, 0.85, 0.9, 600, 1000, 10),
+      "Chick'n bob": (950, 37, 1.0, 0.9, 500, 1100, 7),
+      "Owleaf": (1300, 170, 1.1, 1.1, 650, 1450, 3),
+      "Squeak": (1350, 180, 0.9, 1.0, 800, 1300, 5),
+      "Reko amigo": (1375, 200, 1.0, 1.8, 750, 1400, 8),
+      "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
@@ -77,12 +77,13 @@ class Player :
         self.modif2=1
         self.damage_boost=1
         if j==0 :
-            self.stam_pos = (30,20, 100, 160)
+            #            (xstam,ystam,xPV,xammo,xnammo,ynammo)
+            self.stam_pos = (30,20, 100, 160, 20, HEIGH-40)
             self.right,self.left=True, False
             self.axe_x1, self.axe_y1=1, 0
             self.death=pygame.transform.rotate(self.death, -90)
         else :
-            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-190)
+            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-190, WIDTH-420, HEIGH-40)
             self.right,self.left=False, True
             self.axe_x1, self.axe_y1=-1, 0
             self.death=pygame.transform.rotate(self.death, 90)
@@ -271,6 +272,13 @@ class Player :
         #les munitions
         text_ammo = font.render(str(int(self.ammo)), True, "orange")
         screen.blit(text_ammo, (self.stam_pos[3], self.stam_pos[1]*1.8))
+
+        #new ammo
+        if self.ammo>1 :
+            pygame.draw.rect(screen, "gold", (self.stam_pos[4], self.stam_pos[5], self.ammo/self.capa[6]*400, 20))
+        else :
+            pygame.draw.rect(screen, "orangered", (self.stam_pos[4], self.stam_pos[5], self.ammo/self.capa[6]*400, 20))
+        pygame.draw.rect(screen, "ghostwhite", (self.stam_pos[4], self.stam_pos[5], 400, 20), 2)
 
         
 

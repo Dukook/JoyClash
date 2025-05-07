@@ -19,19 +19,19 @@ screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed,skin,  range, spam, nb_bullet]
-capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 2000, 6),
-      "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1800, 5),
-      "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285)), 650, 2000, 4),
-      "Carroje": (1080, 280, 0.8, 1.7, pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285)), 1200, 1600, 4),
-      "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285)), 450, 1400, 30),
-      "Spookie": (1220, 150, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285)), 650, 1900, 5),
-      "Mushy": (1050, 130, 1.05, 1.5, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 400, 2100, 8),
-      "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285)), 600, 1700, 10),
-      "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1700, 7),
-      "Owleaf": (1300, 170, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 2050, 3),
-      "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1800, 5),
-      "Reko amigo": (1375, 200, 1.0, 1.8, pygame.transform.scale(pygame.image.load("Images/f_Reko amigo.png").convert_alpha(), (240,285)), 750, 2000, 8),
-      "Furbok": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 700, 2800, 2),
+capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
+      "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
+      "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285)), 650, 1300, 4),
+      "Carroje": (1080, 280, 0.8, 1.7, pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285)), 1200, 1300, 4),
+      "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285)), 450, 700, 30),
+      "Spookie": (1220, 150, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285)), 650, 1400, 5),
+      "Mushy": (1050, 130, 1.05, 1.5, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 400, 1450, 8),
+      "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285)), 600, 1000, 10),
+      "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1100, 7),
+      "Owleaf": (1300, 170, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
+      "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
+      "Reko amigo": (1375, 200, 1.0, 1.8, pygame.transform.scale(pygame.image.load("Images/f_Reko amigo.png").convert_alpha(), (240,285)), 750, 1400, 8),
+      "Furbok": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
 
