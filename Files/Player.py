@@ -109,7 +109,7 @@ class Player :
         
 
         
-        if vibr and self.canvibr and self.ammo!=self.capa[6]:
+        if vibr and self.canvibr and self.ammo!=self.capa[6] and self.can:
             
             self.reloading=True
             self.time_reloading=pygame.time.get_ticks()
@@ -142,7 +142,11 @@ class Player :
                 self.stamina+=self.stamina_speed
                 if self.stamina>5000 :
                     self.stamina=5000
-        self.can=bool(self.stamina>=1000)
+        
+        if self.stamina<100 :
+            self.can=False
+        elif self.stamina>=1000 :
+            self.can=True
         
 
         #variation de vitesse
