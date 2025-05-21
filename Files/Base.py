@@ -7,8 +7,8 @@ from Account import Choice, Write
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
@@ -17,8 +17,8 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "UIIA"]
-# "nom" : [PV, Damage, speed, bulletspeed,skin,  range, spam, nb_bullet]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "UIIA"]
+# "nom" : [PV, Damage, speed, bulletspeed(-:↑),skin,  range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
       "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285)), 650, 1300, 4),
@@ -30,13 +30,15 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1100, 7),
       "Owleaf": (1300, 170, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
       "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
-      "Reko amigo": (1375, 200, 1.0, 1.8, pygame.transform.scale(pygame.image.load("Images/f_Reko amigo.png").convert_alpha(), (240,285)), 750, 1400, 8),
       "Furbok": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
+      "Zipit": (1220, 210, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
+      "Semibot": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 700, 2200, 2),
+      "Chauss-être": (1500, 310, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
 
 berry_heal=50
-nb_pers=11
+nb_pers=len(pers)-1
 nb_pers_base=nb_pers
 
 FPS=45
@@ -1094,6 +1096,10 @@ class Game :
                 else :
                     bullet.settings_owl(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
                     player.canhit=[True, True, True]
+                if pers=="Furbok" :
+                    player.furb=randint(10,350)
+                    player.furb2=(randint(0,1)-0.5)*2
+                    player.furb22=(randint(0,1)-0.5)*2
                 player.duration_bullet=self.ticks
                 player.explosion=False
 
@@ -1421,6 +1427,64 @@ class Game :
                                 player_adv.joy.rumble(1,1,1000)
                             player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
 
+            elif pers=="Furbok" :#encore pareille
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
+                            
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
+
+            elif pers=="Zipit" :
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
+                            
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[6]+capa[6]-capa[5]
+                            #pull
+                            x=0
+                            ok=True
+                            """if self.pers!="Bubule" and self.pers!="UIIA":
+                                self.player.move_x(self.player.x1)
+                                for mur in self.murs + self.waters :
+                                    if self.player.rect.colliderect(mur) :
+                                        self.player.unmove_x(self.player.tx1)"""
+                            while x<6 and ok :
+                                x+=1
+                                player_adv.move_x(player_adv.x1-bullet.x*1.5)
+                                player_adv.move_y(player_adv.y1-bullet.y*1.5)
+
+                                for mur in self.murs + self.waters :
+                                    if player_adv.rect.colliderect(mur) :
+                                        ok=False
+
+                            player_adv.unmove_x(player_adv.tx1)
+                            player_adv.unmove_y(player_adv.ty1)
 
 
         

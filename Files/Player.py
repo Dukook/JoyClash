@@ -1,8 +1,6 @@
 import pygame
 from pygame.math import Vector2
-from os import chdir
 
-chdir("Files")
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
@@ -19,8 +17,8 @@ capa={"Hank" : (1320, 210, 0.9, 1.2,700, 1300, 6),
       "Chick'n bob": (950, 37, 1.0, 0.9, 500, 1100, 7),
       "Owleaf": (1300, 170, 1.1, 1.1, 650, 1450, 3),
       "Squeak": (1350, 180, 0.9, 1.0, 800, 1300, 5),
-      "Reko amigo": (1375, 200, 1.0, 1.8, 750, 1400, 8),
       "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
+      "Zipit": (1220, 210, 1.0, 0.8, 650, 1500, 3),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
@@ -69,7 +67,9 @@ class Player :
         self.range=0
         self.duration_bullet=-1000
         self.time_effect=-1000
-        
+        self.furb=0
+        self.furb2=1
+        self.furb22=1
         self.lock=False
         self.death=pygame.transform.scale(pygame.image.load("Images/death.png").convert_alpha(), (18*self.block, 18*self.block))
         self.i_death=0
@@ -98,11 +98,11 @@ class Player :
         shoot=self.joy.get_button(1)
         sprint=self.joy.get_button(0)
         vibr=self.joy.get_button(2)
-        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2
-        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2
+        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2
+        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2*self.furb22
         self.vec = Vector2(self.axe_x1,self.axe_y1)
         self.rad, self.angle = self.vec.as_polar() # le rad est inutile mais je veux pas ça crash
-        self.ajusted_angle = (360-self.angle) % 360
+        self.ajusted_angle = (360-self.angle+self.furb) % 360
         
 
         
@@ -234,6 +234,7 @@ class Player :
     def unmove_y(self, ty1):
         self.y1=ty1
         self.rect.y=self.y1
+
 
     def draw(self, screen):
         #pers 1ligne btw
