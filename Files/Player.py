@@ -19,6 +19,8 @@ capa={"Hank" : (1320, 210, 0.9, 1.2,700, 1300, 6),
       "Squeak": (1350, 180, 0.9, 1.0, 800, 1300, 5),
       "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
       "Zipit": (1220, 210, 1.0, 0.8, 650, 1500, 3),
+      "Semibot": (1280, 260, 1.2, 0.85, 750, 1200, 5),
+      "Chauss-être": (1450, 30, 1.1, 1.0, 450, 500, 6),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
@@ -45,6 +47,7 @@ class Player :
         
         self.PV=self.capa[0]
         self.speed=2
+        self.slow=1
         self.stamina=2500
         self.can=True
         self.canvibr=True
@@ -98,8 +101,8 @@ class Player :
         shoot=self.joy.get_button(1)
         sprint=self.joy.get_button(0)
         vibr=self.joy.get_button(2)
-        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2
-        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2*self.furb22
+        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2*self.slow
+        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2*self.furb22*self.slow
         self.vec = Vector2(self.axe_x1,self.axe_y1)
         self.rad, self.angle = self.vec.as_polar() # le rad est inutile mais je veux pas ça crash
         self.ajusted_angle = (360-self.angle+self.furb) % 360
