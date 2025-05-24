@@ -26,15 +26,15 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Carroje": (1080, 280, 0.8, 1.7, pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285)), 1200, 1300, 4),
       "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285)), 450, 700, 30),
       "Spookie": (1220, 150, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285)), 650, 1400, 5),
-      "Mushy": (1050, 130, 1.05, 1.5, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 450, 1450, 8),
+      "Mushy": (1050, 130, 1.05, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 500, 1450, 8),
       "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285)), 600, 1000, 10),
-      "Chick'n bob": (950, 37, 1.0, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1100, 7),
-      "Owleaf": (1300, 170, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
+      "Chick'n bob": (950, 37, 1.25, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1100, 7),
+      "Owleaf": (1300, 170, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
       "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
-      "Furbok": (1500, 550, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
-      "Zipit": (1220, 210, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
+      "Furbok": (1500, 780, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
+      "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
       "Semibot": (1280, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
-      "Chauss-être": (1450, 10, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
+      "Chauss-être": (1450, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 720, 1200, 8),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
@@ -1327,7 +1327,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            percent=min(max((self.ticks - player.duration_bullet)/(capa[5])+10/100, 20/100),1)*37/100
+                            percent=min(max((self.ticks - player.duration_bullet)/(capa[5])+10/100, 25/100),1)*37/100
                             player_adv.PV-=percent*player_adv.capa[0]*player.damage_boost*player.powerlift
                             player_adv.i_death=8*percent*self.block #un peu moin de 3*3(8) car 3 de base et 3 pour 37*3=100%
                             if self.rumb :
@@ -1357,7 +1357,7 @@ class Game :
                                     player.canhit[x]=False
                                     player_adv.i_death=3*self.block
                                     if self.rumb :
-                                        self.player.joy.rumble(1,1,1000)     
+                                        player_adv.joy.rumble(1,1,1000)     
                                     if bullet.power[x]==0 :
                                         player.PV+=capa[1]*player.damage_boost*0.2*player.powerlift
                                         player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
@@ -1414,14 +1414,18 @@ class Game :
                         bullet.update()
                         bullet.draw(self.screen)
                         if player_adv.rect.colliderect(bullet) :
+                            percent=max((self.ticks - player.duration_bullet)/(capa[5]*2),10/100)*10
+                            player_adv.PV-=capa[1]/percent*player.damage_boost*player.powerlift
+
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
-                            player_adv.i_death=3*self.block
+                            #player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
+                            player_adv.i_death=1/percent*3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
                             player.duration_bullet=self.ticks-capa[5]
-                            #pull
+                            player.time_effect=self.ticks
+                            """#pull
                             x=0
                             ok=True
                             while x<6 and ok :
@@ -1434,7 +1438,20 @@ class Game :
                                         ok=False
 
                             player_adv.unmove_x(player_adv.tx1)
-                            player_adv.unmove_y(player_adv.ty1)
+                            player_adv.unmove_y(player_adv.ty1)"""
+
+                if self.ticks-player.time_effect<120 :
+                    ok=True
+                    player_adv.x1-=bullet.x*0.8
+                    player_adv.y1-=bullet.y*0.8
+                    player_adv.move_x(player_adv.x1)
+                    player_adv.move_y(player_adv.y1)
+                    for mur in self.murs + self.waters :
+                        if player_adv.rect.colliderect(mur) :
+                            ok=False
+                    if not ok :
+                        player_adv.unmove_x(player_adv.tx1)
+                        player_adv.unmove_y(player_adv.ty1)
             
             elif pers=="Chauss-être" :
                 self.smelt_pos.center=player.rect.center
@@ -1481,7 +1498,6 @@ class Game :
                             player.canhit=False
                             player.hitwall=True
                             k_damage=1
-                            print(self.n)
                             if self.n==0 :
                                 player.PV+=60   
                                 player.ammo+=1 
@@ -1491,7 +1507,7 @@ class Game :
                                 player.time_effect=self.ticks
                             elif self.n==3 :
                                 if randint(1,10)==1 :
-                                    k_damage=4.5
+                                    k_damage=5
                                 else :
                                     k_damage=0
                             elif self.n==4 :

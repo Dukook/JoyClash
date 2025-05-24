@@ -2,7 +2,7 @@ import pygame
 from math import cos, sin, radians
 from random import randint
 
-angle_diff=12
+angle_diff=15
 
 class Bullet :
     def __init__(self, brawleur, block, speed):
@@ -10,7 +10,7 @@ class Bullet :
         self.speed=speed
         if brawleur=="Owleaf" :
             self.image=[]
-            scaling=(block/2)/(pygame.image.load(f"Images/a_{brawleur}_0.png").convert_alpha().get_height())
+            scaling=(block/2.5)/(pygame.image.load(f"Images/a_{brawleur}_0.png").convert_alpha().get_height())
             for x in range(3) :
                 self.image.append(pygame.transform.scale_by(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), scaling))
             
