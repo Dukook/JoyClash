@@ -14,7 +14,10 @@ class Bullet :
             for x in range(3) :
                 self.image.append(pygame.transform.scale_by(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), scaling))
             
-            
+        elif brawleur=="Paper Dukook" :
+            self.image=[]
+            for x in range(8) :
+                self.image.append(pygame.transform.scale(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), (1.2*self.block, 1.2*self.block)))
         else :
             try : 
                 self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
@@ -28,6 +31,14 @@ class Bullet :
         if not acc :
             angle+=randint(-30, 30)
         self.image2=pygame.transform.rotate(self.image, angle)
+        self.rect=self.image2.get_rect(x=x+self.block/2-self.image2.get_width()/2, y=y+self.block/2-self.image2.get_height()/2)
+        self.x=cos(radians(angle))*self.block/(3*self.speed)
+        self.y=-sin(radians(angle))*self.block/(3*self.speed)
+
+    def settings_paper(self, x, y, angle, acc, n) :
+        if not acc :
+            angle+=randint(-30, 30)
+        self.image2=pygame.transform.rotate(self.image[n], angle)
         self.rect=self.image2.get_rect(x=x+self.block/2-self.image2.get_width()/2, y=y+self.block/2-self.image2.get_height()/2)
         self.x=cos(radians(angle))*self.block/(3*self.speed)
         self.y=-sin(radians(angle))*self.block/(3*self.speed)

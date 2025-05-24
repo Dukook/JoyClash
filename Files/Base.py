@@ -7,8 +7,8 @@ from Account import Choice, Write
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
@@ -16,8 +16,9 @@ info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "T
 pygame.init()
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
-
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "UIIA"]
+star=[1,2,2,2,3,4,5,6]
+star_ammo=[0,0,3,4,5,6,7,7,7]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed(-:↑),skin,  range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
@@ -32,8 +33,9 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
       "Furbok": (1500, 550, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "Zipit": (1220, 210, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
-      "Semibot": (1280, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1200, 5),
+      "Semibot": (1280, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
       "Chauss-être": (1450, 10, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
+      "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 720, 1200, 8),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
 
@@ -1093,18 +1095,24 @@ class Game :
                 player.shooting=True
                 player.range=0
                 player.hitwall=False
-                if pers!="Owleaf" :
-                    bullet.settings(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
-                    player.canhit=True
-                else :
+                if pers=="Owleaf" :
                     bullet.settings_owl(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
                     player.canhit=[True, True, True]
+                elif pers=="Paper Dukook" :
+                    player.ammo+=1
+                    self.n=randint(0,star_ammo[player.ammo]) 
+                    player.ammo-=star[self.n]
+                    bullet.settings_paper(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1], self.n)
+                    player.canhit=True
+                else :
+                    bullet.settings(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
+                    player.canhit=True
                 if pers=="Furbok" :
                     player.furb=randint(10,350)
                     player.furb2=(randint(0,1)-0.5)*2
                     player.furb22=(randint(0,1)-0.5)*2
                 elif pers=="Semibot" :
-                    player.PV-=80
+                    player.PV-=60
                 player.duration_bullet=self.ticks
                 player.explosion=False
 
@@ -1128,11 +1136,11 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
-                            player.PV+=50
+                            player.PV+=80
                             player.duration_bullet=self.ticks-capa[5]
             
             elif pers=="Berry" :
@@ -1141,12 +1149,12 @@ class Game :
                 #self.screen.blit(self.ice, self.ice_pos)
 
                 if player_adv.rect.colliderect(self.ice_pos) :
-                    player_adv.PV-=capa[1]/FPS*player.damage_boost
+                    player_adv.PV-=capa[1]/FPS*player.damage_boost*player.powerlift
                     player_adv.i_death=1*self.block
                     if self.rumb :
                         player_adv.joy.rumble(1,1,200)
                 if player.rect.colliderect(self.ice_pos) :
-                    player.PV+=capa[1]/(berry_heal*FPS)*player.damage_boost
+                    player.PV+=capa[1]/(berry_heal*FPS)*player.damage_boost*player.powerlift
 
                 if player.shooting :
                     for mur in self.murs :
@@ -1161,7 +1169,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             self.ice_pos.center=bullet.rect.center
                             if self.rumb :
@@ -1191,7 +1199,7 @@ class Game :
                             player.time_effect=self.ticks
                             self.boom_pos.center=bullet.rect.center
                             player.explosion=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1202,7 +1210,7 @@ class Game :
                     if player.canhit :
                         if player_adv.rect.colliderect(self.boom_pos) :
                             player.canhit=False
-                            player_adv.PV-=capa[1]*player.damage_boost*1.2
+                            player_adv.PV-=capa[1]*player.damage_boost*1.2*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1215,7 +1223,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1235,7 +1243,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1251,7 +1259,7 @@ class Game :
                     if player.canhit :
                         if player_adv.rect.colliderect(self.cookie_pos) :
                             player.canhit=False
-                            player_adv.PV-=capa[1]*player.damage_boost*1.2
+                            player_adv.PV-=capa[1]*player.damage_boost*1.2*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1267,7 +1275,7 @@ class Game :
                         bullet.draw(self.screen)
                         if player_adv.rect.colliderect(bullet) :
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1286,7 +1294,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1320,7 +1328,7 @@ class Game :
                             player.canhit=False
                             player.hitwall=True
                             percent=min(max((self.ticks - player.duration_bullet)/(capa[5])+10/100, 20/100),1)*37/100
-                            player_adv.PV-=percent*player_adv.capa[0]*player.damage_boost
+                            player_adv.PV-=percent*player_adv.capa[0]*player.damage_boost*player.powerlift
                             player_adv.i_death=8*percent*self.block #un peu moin de 3*3(8) car 3 de base et 3 pour 37*3=100%
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1351,35 +1359,14 @@ class Game :
                                     if self.rumb :
                                         self.player.joy.rumble(1,1,1000)     
                                     if bullet.power[x]==0 :
-                                        player.PV+=capa[1]*player.damage_boost*0.2
-                                        player_adv.PV-=capa[1]*player.damage_boost
+                                        player.PV+=capa[1]*player.damage_boost*0.2*player.powerlift
+                                        player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                                     elif bullet.power[x]==2 :
-                                        player_adv.PV-=capa[1]*player.damage_boost*1.25
+                                        player_adv.PV-=capa[1]*player.damage_boost*1.25*player.powerlift
                                     else :
-                                        player_adv.PV-=capa[1]*player.damage_boost
+                                        player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                                         player.ammo+=1
 
-            elif pers=="UIIA" :
-                if player.shooting :
-                    if not player.hitwall :
-                        bullet.update()
-                        bullet.draw(self.screen)
-                        if player_adv.rect.colliderect(bullet) :
-                            player.canhit=False
-                            player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
-                            player_adv.i_death=3*self.block
-                            if self.rumb :
-                                player_adv.joy.rumble(1,1,1000)
-                            player.duration_bullet=self.ticks-capa[5]
-                            player.time_effect=self.ticks
-
-                if self.ticks-player.time_effect<5000 :
-                    player_adv.modif=0
-                    if self.rumb :
-                        player_adv.joy.rumble(1,1,1)
-                else :
-                    player_adv.modif=1
 
             elif pers=="Squeak" :
                 if player.shooting :
@@ -1408,7 +1395,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1429,7 +1416,7 @@ class Game :
                         if player_adv.rect.colliderect(bullet) :
                             player.canhit=False
                             player.hitwall=True
-                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
@@ -1453,7 +1440,7 @@ class Game :
                 self.smelt_pos.center=player.rect.center
                 if player_adv.rect.colliderect(self.smelt_pos) :
                     player_adv.slow=0.8
-                    player_adv.PV-=capa[1]*player.damage_boost
+                    player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                     player_adv.i_death=1.5*self.block
                     if self.rumb :
                         player_adv.joy.rumble(0.5,0.5,1000)
@@ -1480,9 +1467,82 @@ class Game :
                         player.unmove_x(player.tx1)
                         player.unmove_y(player.ty1)
 
+            elif pers=="Paper Dukook" :
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[5]
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            k_damage=1
+                            print(self.n)
+                            if self.n==0 :
+                                player.PV+=60   
+                                player.ammo+=1 
+                            elif self.n==1 :
+                                k_damage=1.25
+                            elif self.n==2 :
+                                player.time_effect=self.ticks
+                            elif self.n==3 :
+                                if randint(1,10)==1 :
+                                    k_damage=4.5
+                                else :
+                                    k_damage=0
+                            elif self.n==4 :
+                                player.powerlift=round(player.powerlift*1.1, 1)
+                                player_adv.powerlift=round(player_adv.powerlift*0.9,1)
+                            elif self.n==5 :
+                                k_damage=1.8
+                            elif self.n==6 :
+                                player.PV+=200   
+                                player.ammo+=2
+                            elif self.n==7 :
+                                k_damage=2.5
+
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift*k_damage
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]
+                            
+                                
+
+                if self.ticks-player.time_effect<2000 :
+                    player_adv.modif=0
+                    if self.rumb :
+                        player_adv.joy.rumble(1,1,1)
+                else :
+                    player_adv.modif=1
+
                     
 
+            elif pers=="UIIA" :
+                if player.shooting :
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]
+                            player.time_effect=self.ticks
 
+                if self.ticks-player.time_effect<5000 :
+                    player_adv.modif=0
+                    if self.rumb :
+                        player_adv.joy.rumble(1,1,1)
+                else :
+                    player_adv.modif=1
         
             
 
@@ -1657,7 +1717,7 @@ while running :
 
     if play :
         WIDTH, HEIGHT = sett[3], sett[4]
-        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+        screen = pygame.display.set_mode((WIDTH, HEIGHT))
         game=Game(screen)
         game.run()
     else :
