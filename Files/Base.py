@@ -7,8 +7,8 @@ from Account import Choice, Write
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 star=[1,2,2,2,3,4,5,6]
 star_ammo=[0,0,3,4,5,6,7,7,7]
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "UIIA"]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "...", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed(-:↑),skin,  range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
@@ -33,9 +33,10 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
       "Furbok": (1500, 780, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
-      "Semibot": (1280, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
+      "Semibot": (1330, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
       "Chauss-être": (1450, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 720, 1200, 8),
+      "...": (800, 190, 0.9, 1.0, pygame.transform.scale(pygame.image.load("Images/f_....png").convert_alpha(), (240,285)), 680, 1100, 7),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
 }
 
@@ -838,7 +839,7 @@ class Game :
             if self.pers=="UIIA" or self.pers2=="UIIA" :
                 pygame.mixer.music.load("Songs/UIIA.mp3")
             else :
-                pygame.mixer.music.load("Songs/Trophy.mp3")
+                pygame.mixer.music.load("Songs/Battle.mp3")
             pygame.mixer.music.play()
 
         elif self.plan == "play" :
@@ -934,7 +935,7 @@ class Game :
             #over time
             self.mort+=1
 
-            if self.mort>1800 :
+            if self.mort>2200 :
                 self.mort_exp+=0.0000005
                 self.player.PV-=self.mort_exp*self.capa[0]
                 self.player2.PV-=self.mort_exp*self.capa2[0]
@@ -1536,7 +1537,30 @@ class Game :
                 else :
                     player_adv.modif=1
 
-                    
+            elif pers=="..." :
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[5]
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]
+                            player.time_effect=self.ticks
+
+                if self.ticks-player.time_effect<1200 :
+                    player_adv.mute=0
+                else :
+                    player_adv.mute=1                    
 
             elif pers=="UIIA" :
                 if player.shooting :

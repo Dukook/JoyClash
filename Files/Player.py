@@ -19,9 +19,10 @@ capa={"Hank" : (1320, 210, 0.9, 1.2,700, 1300, 6),
       "Squeak": (1350, 180, 0.9, 1.0, 800, 1300, 5),
       "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
       "Zipit": (1220, 280, 1.0, 0.8, 650, 1500, 3),
-      "Semibot": (1280, 260, 1.2, 0.85, 750, 1250, 5),
+      "Semibot": (1330, 260, 1.2, 0.85, 750, 1250, 5),
       "Chauss-être": (1450, 8, 1.1, 1.0, 250, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, 720, 1200, 8),
+      "...": (800, 190, 0.9, 1.0, 680, 1100, 7),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
@@ -79,6 +80,7 @@ class Player :
         self.i_death=0
         self.modif=1
         self.modif2=1
+        self.mute=1
         self.damage_boost=1
         self.powerlift=1.0
         if j==0 :
@@ -100,7 +102,7 @@ class Player :
 
     def event(self) :
         lock=self.joy.get_button(5)
-        shoot=self.joy.get_button(1)
+        shoot=self.joy.get_button(1)*self.mute
         sprint=self.joy.get_button(0)
         vibr=self.joy.get_button(2)
         self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2*self.slow
