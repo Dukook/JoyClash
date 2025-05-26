@@ -34,7 +34,7 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Furbok": (1500, 780, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
       "Semibot": (1330, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
-      "Chauss-être": (1450, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
+      "Chauss-être": (1180, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 720, 1200, 8),
       "...": (800, 190, 0.9, 1.0, pygame.transform.scale(pygame.image.load("Images/f_....png").convert_alpha(), (240,285)), 680, 1100, 7),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
@@ -791,7 +791,7 @@ class Game :
         self.cookie=pygame.transform.scale(pygame.image.load("Images/Cookie.png").convert_alpha(), (self.block*3.5,self.block*3.5))
         self.cookie_pos=self.cookie.get_rect(x=-1000,y=-1000)
 
-        self.smelt=pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (self.block*4,self.block*4))
+        self.smelt=pygame.transform.scale(pygame.image.load("Images/smelt.png").convert_alpha(), (self.block*4,self.block*4))
         self.smelt_pos=self.smelt.get_rect(x=-1000,y=-1000)
 
         self.down=pygame.transform.scale(pygame.image.load("Images/down.png").convert_alpha(), (self.block/2,self.block/2))
@@ -1456,6 +1456,7 @@ class Game :
             
             elif pers=="Chauss-être" :
                 self.smelt_pos.center=player.rect.center
+                
                 if player_adv.rect.colliderect(self.smelt_pos) :
                     player_adv.slow=0.8
                     player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
@@ -1608,6 +1609,9 @@ class Game :
             elif self.pers2=="Spookie" :
                 if self.ticks-self.player2.time_effect<300 :
                     self.screen.blit(self.cookie, self.cookie_pos)
+
+            if self.pers=="Chauss-être" or self.pers2=="Chauss-être" :
+                self.screen.blit(self.smelt, self.smelt_pos)
 
             
             #potion
