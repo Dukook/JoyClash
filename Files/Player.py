@@ -20,14 +20,17 @@ capa={"Hank" : (1320, 210, 0.9, 1.2,700, 1300, 6),
       "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
       "Zipit": (1220, 280, 1.0, 0.8, 650, 1500, 3),
       "Semibot": (1330, 260, 1.2, 0.85, 750, 1250, 5),
-      "Chauss-être": (1180, 8, 1.1, 1.0, 250, 450, 6),
+      "Chauss-être": (1180, 8, 1.1, 1.0, 200, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, 720, 1200, 8),
-      "...": (800, 190, 0.9, 1.0, 680, 1100, 7),
+      "MiraDraco": (1340, 220, 0.9, 0.8, 700, 1450, 4),
+      "Pyroxis": (1210, 160, 1.1, 0.9, 500, 1000, 4),
+      "...": (500, 190, 0.9, 1.0, 680, 1100, 2),
       "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
 class Player :
-    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi):
+    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi, act):
+        self.act=act
         self.block=block
         self.pers=perso
         self.capa=capa[perso]
@@ -83,6 +86,11 @@ class Player :
         self.mute=1
         self.damage_boost=1
         self.powerlift=1.0
+        self.ammo_boost=1
+        self.one_time=False
+        self.bool_tp=False
+        self.tping=False
+        self.flames=0
         if j==0 :
             #            (xstam,ystam,xPV,xammo,xnammo,ynammo)
             self.stam_pos = (30,20, 100, 160, 20, HEIGH-40)
@@ -99,12 +107,15 @@ class Player :
 
         self.up, self.down=False, False
 
+        self.tp=pygame.transform.scale(pygame.image.load("Images/tp.png").convert_alpha(), (self.block, self.block))
+        self.tp_pos=self.tp.get_rect(x=-1000, y=-1000)
+
 
     def event(self) :
-        lock=self.joy.get_button(5)
-        shoot=self.joy.get_button(1)*self.mute
-        sprint=self.joy.get_button(0)
-        vibr=self.joy.get_button(2)
+        lock=self.joy.get_button(self.act["N"])
+        shoot=self.joy.get_button(self.act["R"])*self.mute
+        sprint=self.joy.get_button(self.act["D"])
+        vibr=self.joy.get_button(self.act["L"])
         self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2*self.slow
         self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2*self.furb22*self.slow
         self.vec = Vector2(self.axe_x1,self.axe_y1)
@@ -116,10 +127,17 @@ class Player :
         
 
         
-        if vibr and self.canvibr and self.ammo!=self.capa[6] and self.can:
+        if vibr and self.canvibr and self.ammo!=self.capa[6] and self.can and not self.reloading:
             
             self.reloading=True
             self.time_reloading=pygame.time.get_ticks()
+            if self.pers=="MiraDraco" :
+                self.x1=self.tp_pos.x
+                self.y1=self.tp_pos.y
+                self.move_x(self.x1)
+                self.move_y(self.y1)
+                self.bool_tp=False
+                self.tping=True
 
 
         #direction joueur
@@ -165,17 +183,17 @@ class Player :
             self.speed=0.115
 
         #déplacements
-        if self.right and self.x1<self.WIDTH-self.block and not lock:
+        if self.right and not lock:
             self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
             self.stamina_speed=2
-        elif self.left and self.x1>0 and not lock :
+        elif self.left and not lock :
             self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
             self.stamina_speed=2
 
-        if self.down and self.y1<self.HEIGH-self.block and not lock :
+        if self.down and not lock :
             self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
             self.stamina_speed=2
-        elif self.up and self.y1>0 and not lock :
+        elif self.up and not lock :
             self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
             self.stamina_speed=2
 
@@ -183,7 +201,11 @@ class Player :
         if shoot and self.canshoot and self.ajusted_angle!=None and not self.reloading:
             if self.ammo>0 :
                 self.shot_acc=[True, lock]
-                self.ammo-=1
+                if self.pers=="MiraDraco" and self.ammo==self.capa[6] :
+                    self.tp_pos.center=self.rect.center
+                    self.bool_tp=True
+                self.ammo-=1*self.ammo_boost
+                
             else :
                 self.joy.rumble(0.5,0.5,500)
 
@@ -198,7 +220,7 @@ class Player :
     def update(self) :
         self.radius=int(self.stamina//200)
         self.color=(max(255-self.stamina//15,0), max(min(self.stamina//4-300,255),0), 0)
-        if self.pers!="UIIA" :
+        if self.pers!="UIIA" and self.pers!="Paper Dukook":
             if self.up and abs(self.axe_y1)>abs(self.axe_x1) :
                 self.new_image=self.image
             elif self.left and abs(self.axe_x1)>abs(self.axe_y1) :

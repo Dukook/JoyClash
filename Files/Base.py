@@ -7,8 +7,8 @@ from Account import Choice, Write
 
 """info_P1, pseudo_P1=Choice(1)
 info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 
 
 
@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
 
 star=[1,2,2,2,3,4,5,6]
 star_ammo=[0,0,3,4,5,6,7,7,7]
-pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "...", "UIIA"]
+pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "MiraDraco", "Pyroxis", "...", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed(-:↑),skin,  range, spam, nb_bullet]
 capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
@@ -32,13 +32,36 @@ capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
       "Owleaf": (1300, 170, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
       "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
       "Furbok": (1500, 780, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
-      "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 650, 1500, 3),
+      "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/f_Zipit.png").convert_alpha(), (240,285)), 650, 1500, 3),
       "Semibot": (1330, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
-      "Chauss-être": (1180, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 250, 450, 6),
-      "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 720, 1200, 8),
-      "...": (800, 190, 0.9, 1.0, pygame.transform.scale(pygame.image.load("Images/f_....png").convert_alpha(), (240,285)), 680, 1100, 7),
-      "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1300, 1300, 69)
+      "Chauss-être": (1180, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 200, 450, 6),
+      "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Paper Dukook.png").convert_alpha(), (240,285)), 720, 1200, 8),
+      "MiraDraco": (1340, 220, 0.9, 0.8, pygame.transform.scale(pygame.image.load("Images/f_MiraDraco.png").convert_alpha(), (240,285)), 700, 1450, 4),
+      "Pyroxis": (1210, 160, 1.1, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Pyroxis.png").convert_alpha(), (240,285)), 500, 1000, 4),
+      "...": (500, 190, 0.9, 1.0, pygame.transform.scale(pygame.image.load("Images/f_....png").convert_alpha(), (240,285)), 680, 1100, 2),
+      "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1000, 1000, 69)
 }
+
+xbox={"-":6,
+      "L":2,
+      "U":3,
+      "R":1,
+      "D":0,
+      "N":5,
+      "B":4,
+}
+
+ps={"-":4,
+      "L":2,
+      "U":3,
+      "R":1,
+      "D":0,
+      "N":10,
+      "B":9,
+}
+
+act=xbox
+act2=xbox
 
 berry_heal=50
 nb_pers=len(pers)-1
@@ -144,8 +167,8 @@ class Menu :
 
     def event(self) :
 
-        
-        settings=self.joy1.get_button(6)
+        global act, act2
+        settings=self.joy1.get_button(act["-"])
 
         if self.plan=="settings" :
 
@@ -157,12 +180,13 @@ class Menu :
                     if event.key == pygame.K_SPACE :
                         self.joy1,self.joy2=self.joy2,self.joy1
                         self.swap= not self.swap
+                    
 
 
-            low=self.joy1.get_button(0)
-            mid=self.joy1.get_button(1)
-            high=self.joy1.get_button(3)
-            rumb=self.joy1.get_button(2)
+            low=self.joy1.get_button(act["D"])
+            mid=self.joy1.get_button(act["R"])
+            high=self.joy1.get_button(act["U"])
+            rumb=self.joy1.get_button(act["L"])
             axe1=self.joy1.get_axis(0)
             axe2=self.joy2.get_axis(0)
             axe3=-self.joy1.get_axis(1)
@@ -223,20 +247,29 @@ class Menu :
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.KEYDOWN :
+                    if event.key == pygame.K_KP1 and act==ps :
+                        act=xbox
+                    elif event.key == pygame.K_KP1 and act==xbox :
+                        act=ps
+                    if event.key == pygame.K_KP2 and act2==ps :
+                        act2=xbox
+                    elif event.key == pygame.K_KP2 and act2==xbox :
+                        act2=ps
 
 
-            self.play1 = self.joy1.get_button(3)
-            self.play2 = self.joy2.get_button(3)
-            next1=self.joy1.get_button(5)
-            next2=self.joy2.get_button(5)
-            back1=self.joy1.get_button(4)
-            back2=self.joy2.get_button(4)
-            self.purchase1=self.joy1.get_button(1)
-            self.purchase2=self.joy2.get_button(1)
-            change_map=self.joy1.get_button(0)
+            self.play1 = self.joy1.get_button(act["U"])
+            self.play2 = self.joy2.get_button(act2["U"])
+            next1=self.joy1.get_button(act["N"])
+            next2=self.joy2.get_button(act2["N"])
+            back1=self.joy1.get_button(act["B"])
+            back2=self.joy2.get_button(act2["B"])
+            self.purchase1=self.joy1.get_button(act["R"])
+            self.purchase2=self.joy2.get_button(act2["R"])
+            change_map=self.joy1.get_button(act["D"])
             UIIA=pygame.key.get_pressed()
-            vibr=self.joy1.get_button(2)
-            vibr2=self.joy2.get_button(2)
+            vibr=self.joy1.get_button(act["L"])
+            vibr2=self.joy2.get_button(act2["L"])
             if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
                 self.can_swapp=False
                 global nb_pers
@@ -595,7 +628,7 @@ class Menu :
 class Game :
     
     def __init__(self, screen):
-        global sett
+        global sett, act, act2
         self.rumb=sett[9]
         self.pers=pers[sett[6]]
         self.capa=capa[self.pers]
@@ -621,8 +654,8 @@ class Game :
             j=[1,0]
         else :
             j=[0,1]
-        self.player=Player(1*self.block, 9*self.block, self.pers, sett[0], WIDTH, HEIGHT, 0, self.block, j[0])
-        self.player2=Player(30*self.block, 9*self.block, self.pers2, sett[1], WIDTH, HEIGHT, 1, self.block, j[1])
+        self.player=Player(1*self.block, 9*self.block, self.pers, sett[0], WIDTH, HEIGHT, 0, self.block, j[0], act)
+        self.player2=Player(30*self.block, 9*self.block, self.pers2, sett[1], WIDTH, HEIGHT, 1, self.block, j[1], act2)
         self.plan="start"
 
         #potions
@@ -630,8 +663,10 @@ class Game :
         self.p_speed=pygame.transform.scale(pygame.image.load("Images/p_speed.png").convert_alpha(), (self.block, self.block))
         self.p_damage=pygame.transform.scale(pygame.image.load("Images/p_damage.png").convert_alpha(), (self.block, self.block))
         self.p_heal=pygame.transform.scale(pygame.image.load("Images/p_heal.png").convert_alpha(), (self.block, self.block))
+        self.p_ammo=pygame.transform.scale(pygame.image.load("Images/p_ammo.png").convert_alpha(), (self.block, self.block))
+        self.p_love=pygame.transform.scale(pygame.image.load("Images/p_love.png").convert_alpha(), (self.block, self.block))
         self.spawn=pygame.transform.scale(pygame.image.load("Images/spawn.png").convert_alpha(), (2*self.block, 2*self.block))
-        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_heal, "heal")]
+        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_heal, "heal"), (self.p_ammo, "ammo"), (self.p_love, "love")]
         self.p_on_stage=[False,pygame.time.get_ticks()+randint(6000, 8000)]
         self.p_how_long=-5000
 
@@ -639,6 +674,11 @@ class Game :
         self.murs=[]
         self.waters=[]
         self.bushs=[]
+
+        self.murs.append(pygame.Rect(-1*self.block,-1*self.block, 34*self.block, 1*self.block))
+        self.murs.append(pygame.Rect(-1*self.block,0*self.block, 1*self.block, 18*self.block))
+        self.murs.append(pygame.Rect(-1*self.block,18*self.block, 34*self.block, 1*self.block))
+        self.murs.append(pygame.Rect(32*self.block,0*self.block, 1*self.block, 18*self.block))
 
         if self.map=="SS" :
             self.murs.append(pygame.Rect(4*self.block,2*self.block, 1*self.block, 4*self.block))
@@ -794,6 +834,8 @@ class Game :
         self.smelt=pygame.transform.scale(pygame.image.load("Images/smelt.png").convert_alpha(), (self.block*4,self.block*4))
         self.smelt_pos=self.smelt.get_rect(x=-1000,y=-1000)
 
+        self.tp=pygame.transform.scale(pygame.image.load("Images/tp.png").convert_alpha(), (self.block, self.block))
+
         self.down=pygame.transform.scale(pygame.image.load("Images/down.png").convert_alpha(), (self.block/2,self.block/2))
 
 
@@ -821,7 +863,7 @@ class Game :
         self.ticks=pygame.time.get_ticks()
         global running
         
-        pause=bool(self.player.joy.get_button(6) and self.player2.joy.get_button(6))
+        pause=bool(self.player.joy.get_button(act["-"]) and self.player2.joy.get_button(act2["-"]))
 
         if self.plan == "start" :
             for x in range(3) :
@@ -849,10 +891,16 @@ class Game :
                     running=False
 
             self.player.event()
+            if self.player.tping :
+                self.player.time_effect=self.ticks
+                self.player.tping=False
             self.player2.event()
+            if self.player2.tping :
+                self.player2.time_effect=self.ticks
+                self.player2.tping=False
 
-            self.emt=self.player.joy.get_button(3)
-            self.emt2=self.player2.joy.get_button(3)
+            self.emt=self.player.joy.get_button(act["U"])
+            self.emt2=self.player2.joy.get_button(act2["U"])
             """if self.player.shot_acc[0] :
                 self.player.canshoot = False
                 self.canshot=False
@@ -915,7 +963,7 @@ class Game :
                     if event.key==pygame.K_SPACE :
                         stop=True
 
-            stop2=bool(self.player.joy.get_button(6) or self.player2.joy.get_button(6))
+            stop2=bool(self.player.joy.get_button(act["-"]) or self.player2.joy.get_button(act2["-"]))
             if self.running ==True :
                 self.running=not bool(stop or stop2)
                 
@@ -945,7 +993,7 @@ class Game :
                 self.p_on_stage[0]=True
                 self.p_how_long=self.ticks
                 self.p_pos_on_stage=self.p_pos[randint(0,len(self.p_pos)-1)]
-                self.p_which=self.p_all[randint(0,2)]
+                self.p_which=self.p_all[randint(0,len(self.p_all)-1)]
                 self.p_rect=self.p_which[0]
                 self.p_rect=self.p_rect.get_rect(x=self.p_pos_on_stage[0], y=self.p_pos_on_stage[1])
             if self.p_on_stage[0] and self.p_how_long+4000<self.ticks :
@@ -958,6 +1006,12 @@ class Game :
                     elif self.p_which[1]=="damage" :
                         self.player.damage_boost=1.25
                         self.p_duration=self.ticks
+                    elif self.p_which[1]=="ammo" :
+                        self.player.ammo_boost=0
+                        self.player.ammo=self.player.capa[6]
+                        self.p_duration=self.ticks
+                    else :
+                        self.player.PV=1
                     self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
                 if self.player2.rect.colliderect(self.p_rect) :
                     if self.p_which[1]=="heal" :
@@ -968,29 +1022,43 @@ class Game :
                     elif self.p_which[1]=="damage" :
                         self.player2.damage_boost=1.25
                         self.p_duration=self.ticks
+                    elif self.p_which[1]=="ammo" :
+                        self.player2.ammo_boost=0
+                        self.player2.ammo=self.player2.capa[6]
+                        self.p_duration=self.ticks
+                    else :
+                        self.player2.PV=1
+                    self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
+
+                if self.p_how_long+14000<self.ticks :
                     self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
 
 
             if self.p_duration+5000<self.ticks :
                 self.player.damage_boost=1.0
                 self.player.base_speed=self.capa[2]
+                self.player.ammo_boost=1
                 self.player2.damage_boost=1.0
                 self.player2.base_speed=self.capa2[2]
+                self.player2.ammo_boost=1
 
 
             #movements
             self.player.update()
             self.player2.update()
             
+            hit=False
             if self.pers!="Bubule" and self.pers!="UIIA":
                 self.player.move_x(self.player.x1)
                 for mur in self.murs + self.waters :
                     if self.player.rect.colliderect(mur) :
                         self.player.unmove_x(self.player.tx1)
+                        hit=True
                 self.player.move_y(self.player.y1)
                 for mur in self.murs + self.waters :
                     if self.player.rect.colliderect(mur) :
                         self.player.unmove_y(self.player.ty1)
+                        hit=True
             elif self.pers=="Bubule":
                 self.player.move_x(self.player.x1)
                 for mur in self.murs :
@@ -1004,15 +1072,20 @@ class Game :
                 self.player.move_x(self.player.x1)
                 self.player.move_y(self.player.y1)
 
+            
+
+            hit2 = False
             if self.pers2!="Bubule" and self.pers2!="UIIA":
                 self.player2.move_x(self.player2.x1)
                 for mur in self.murs + self.waters :
                     if self.player2.rect.colliderect(mur) :
                         self.player2.unmove_x(self.player2.tx1)
+                        hit2=True
                 self.player2.move_y(self.player2.y1)
                 for mur in self.murs + self.waters :
                     if self.player2.rect.colliderect(mur) :
                         self.player2.unmove_y(self.player2.ty1)
+                        hit2=True
             elif self.pers2=="Bubule" :
                 self.player2.move_x(self.player2.x1)
                 for mur in self.murs :
@@ -1026,7 +1099,10 @@ class Game :
                 self.player2.move_x(self.player2.x1)
                 self.player2.move_y(self.player2.y1)
 
-
+            if hit and self.pers=="..." and self.rumb :
+                self.player.joy.rumble(0.2,0.2,int(1000/FPS))
+            elif hit2 and self.pers2=="..." and self.rumb :
+                self.player2.joy.rumble(0.2,0.2,int(1000/FPS))
             
 
             #condition de fin
@@ -1034,13 +1110,13 @@ class Game :
             if self.player.PV<=0 or self.player2.PV<=0 :
                 if self.player.PV<=0 and self.player2.PV<=0 :
                     self.winner="draw"
-                    reward=[2,2]
+                    reward=[6,6]
                 elif self.player.PV<=0 :
                     self.winner="green"
-                    reward=[1,3]
+                    reward=[3,10]
                 else :
                     self.winner="blue"
-                    reward=[3,1]
+                    reward=[10,3]
                 self.plan="end"
                 self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME)
                 self.screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
@@ -1100,9 +1176,9 @@ class Game :
                     bullet.settings_owl(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1])
                     player.canhit=[True, True, True]
                 elif pers=="Paper Dukook" :
-                    player.ammo+=1
+                    player.ammo+=1*player.ammo_boost
                     self.n=randint(0,star_ammo[player.ammo]) 
-                    player.ammo-=star[self.n]
+                    player.ammo-=star[self.n]*player.ammo_boost
                     bullet.settings_paper(player.rect.x, player.rect.y, player.ajusted_angle, player.shot_acc[1], self.n)
                     player.canhit=True
                 else :
@@ -1311,8 +1387,11 @@ class Game :
                         player_adv.i_death=1*self.block
                         if self.rumb :
                             player_adv.joy.rumble(1,1,500)
+                    player.one_time=False
                 else :
-                    player_adv.modif=1
+                    if not player.one_time :
+                        player.one_time=True
+                        player_adv.modif=1
 
             
             elif pers=="Chick'n bob" :
@@ -1531,13 +1610,80 @@ class Game :
                             
                                 
 
-                if self.ticks-player.time_effect<2000 :
-                    player_adv.modif=0
+                if self.ticks-player.time_effect<1200 :
+                    player.modif=0
                     if self.rumb :
-                        player_adv.joy.rumble(1,1,1)
+                        player.joy.rumble(1,1,1)
+                    player.one_time=False
                 else :
-                    player_adv.modif=1
+                    if not player.one_time :
+                        player.modif=1  
+                        player.one_time=True
 
+            elif pers=="MiraDraco" :
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[5]
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]
+
+                if self.ticks-player.time_effect<1500 :
+                    player.modif=0
+                    if self.rumb :
+                        player.joy.rumble(1,1,1)
+                    player.one_time=False
+                else :
+                    if not player.one_time :
+                        player.modif=1  
+                        player.one_time=True
+
+            elif pers=="Pyroxis" :
+                if player.shooting :
+                    for mur in self.murs :
+                        if mur.colliderect(bullet) :
+                            player.shooting=False
+                            player.hitwall=True
+                            player.duration_bullet=self.ticks-capa[5]
+                    if not player.hitwall :
+                        bullet.update()
+                        bullet.draw(self.screen)
+                        if player_adv.rect.colliderect(bullet) :
+                            player.canhit=False
+                            player.hitwall=True
+                            percent=1+0.01/(max(player.PV/capa[0], 0.01))
+                            player_adv.PV-=capa[1]*percent*player.damage_boost*player.powerlift
+                            player_adv.i_death=3*self.block
+                            if self.rumb :
+                                player_adv.joy.rumble(1,1,1000)
+                            player.duration_bullet=self.ticks-capa[5]
+                            player.flames+=round(capa[1]*percent*player.damage_boost/1.5,1)
+                            self.ticks_flammes=[int(self.ticks/1000), self.ticks%1000]
+
+                if player.flames>0 :
+                    if self.ticks_flammes[0]!=int((self.ticks-self.ticks_flammes[1])/1000) :
+                        self.ticks_flammes[0]+=1
+                        damage_f=max(round(player.flames/3,1), 20)
+                        player_adv.PV-=damage_f
+                        player.flames-=damage_f
+                        if player.flames<0 :
+                            player.flames=0
+                        player_adv.i_death=1*self.block
+                        if self.rumb :
+                            player_adv.joy.rumble(0.7,0.7,500)
+
+                print(player.flames)
             elif pers=="..." :
                 if player.shooting :
                     for mur in self.murs :
@@ -1582,9 +1728,12 @@ class Game :
                     player_adv.modif=0
                     if self.rumb :
                         player_adv.joy.rumble(1,1,1)
+                        player.one_time=False
                 else :
-                    player_adv.modif=1
-        
+                    if not player.one_time :
+                        player_adv.modif=1  
+                        player.one_time=True
+                    
             
 
 
@@ -1613,6 +1762,10 @@ class Game :
             if self.pers=="Chauss-être" or self.pers2=="Chauss-être" :
                 self.screen.blit(self.smelt, self.smelt_pos)
 
+            if self.player.bool_tp :
+                self.screen.blit(self.tp, self.player.tp_pos)
+            elif self.player2.bool_tp :
+                self.screen.blit(self.tp, self.player2.tp_pos)
             
             #potion
             if self.p_on_stage[0] :
