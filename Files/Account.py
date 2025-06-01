@@ -78,7 +78,7 @@ def Create(j) :
             pseudo=input("\nPassword too short or too long (5 to 20 characters),\nUse 'exit' to go back to main menu,\nOr choose an other one\n\n - ")
         else :
             new_acc=open(f'Saves/{pseudo}.txt','w')
-            new_acc.write(f"{password}\n0\nTrue\nTrue\nTrue\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nTrue\n")
+            new_acc.write(f"{password}\n10\nTrue\nTrue\nTrue\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nFalse\nTrue\n")
             new_acc.close()
             print(f"\nCongratulation {pseudo} your account has benn created !\n")
             print(f"\nPlayer {j} succesfully connected !")

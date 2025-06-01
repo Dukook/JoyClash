@@ -20,28 +20,30 @@ star=[1,2,2,2,3,4,5,6]
 star_ammo=[0,0,3,4,5,6,7,7,7]
 pers=["Hank", "Berry", "Surge", "Carroje", "Popofox", "Spookie", "Mushy", "Bubule", "Chick'n bob", "Owleaf", "Squeak", "Furbok", "Zipit", "Semibot", "Chauss-être", "Paper Dukook", "MiraDraco", "Pyroxis", "...", "UIIA"]
 # "nom" : [PV, Damage, speed, bulletspeed(-:↑),skin,  range, spam, nb_bullet]
-capa={"Hank" : (1320, 210, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
+capa={"Hank" : (1320, 240, 0.9, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Hank.png").convert_alpha(), (240,285)),700, 1300, 6),
       "Berry": (1000, 230, 1.1, 1.2, pygame.transform.scale(pygame.image.load("Images/f_Berry.png").convert_alpha(), (240,285)), 600, 1200, 5),
-      "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285)), 650, 1300, 4),
+      "Surge": (1260, 225, 0.9, 1.3, pygame.transform.scale(pygame.image.load("Images/f_Surge.png").convert_alpha(), (240,285)), 650, 1300, 6),
       "Carroje": (1080, 280, 0.8, 1.7, pygame.transform.scale(pygame.image.load("Images/f_Carroje.png").convert_alpha(), (240,285)), 1200, 1300, 4),
-      "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285)), 450, 700, 30),
+      "Popofox": (1150, 155, 1.2, 0.6, pygame.transform.scale(pygame.image.load("Images/f_Popofox.png").convert_alpha(), (240,285)), 450, 700, 18),
       "Spookie": (1220, 150, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Spookie.png").convert_alpha(), (240,285)), 650, 1400, 5),
       "Mushy": (1050, 130, 1.05, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Mushy.png").convert_alpha(), (240,285)), 500, 1450, 8),
       "Bubule": (1400, 200, 0.85, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Bubule.png").convert_alpha(), (240,285)), 600, 1000, 10),
       "Chick'n bob": (950, 37, 1.25, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Chick'n bob.png").convert_alpha(), (240,285)), 500, 1100, 7),
       "Owleaf": (1300, 170, 1.0, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Owleaf.png").convert_alpha(), (240,285)), 650, 1450, 3),
-      "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1300, 5),
+      "Squeak": (1350, 180, 0.9, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Squeak.png").convert_alpha(), (240,285)), 900, 1310, 5),
       "Furbok": (1500, 780, 0.75, 0.7, pygame.transform.scale(pygame.image.load("Images/f_Furbok.png").convert_alpha(), (240,285)), 700, 2200, 2),
       "Zipit": (1220, 305, 1.0, 0.8, pygame.transform.scale(pygame.image.load("Images/f_Zipit.png").convert_alpha(), (240,285)), 650, 1500, 3),
-      "Semibot": (1330, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 750, 1250, 5),
-      "Chauss-être": (1180, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/goat_surge.png").convert_alpha(), (240,285)), 200, 450, 6),
+      "Semibot": (1330, 260, 1.2, 0.85, pygame.transform.scale(pygame.image.load("Images/f_Semibot.png").convert_alpha(), (240,285)), 750, 1250, 5),
+      "Chauss-être": (1180, 8, 1.1, 1.0, pygame.transform.scale(pygame.image.load("Images/f_Chauss-être.png").convert_alpha(), (240,285)), 200, 450, 6),
       "Paper Dukook": (1200, 180, 1.1, 1.1, pygame.transform.scale(pygame.image.load("Images/f_Paper Dukook.png").convert_alpha(), (240,285)), 720, 1200, 8),
       "MiraDraco": (1340, 220, 0.9, 0.8, pygame.transform.scale(pygame.image.load("Images/f_MiraDraco.png").convert_alpha(), (240,285)), 700, 1450, 4),
       "Pyroxis": (1210, 160, 1.1, 0.9, pygame.transform.scale(pygame.image.load("Images/f_Pyroxis.png").convert_alpha(), (240,285)), 500, 1000, 4),
       "...": (500, 190, 0.9, 1.0, pygame.transform.scale(pygame.image.load("Images/f_....png").convert_alpha(), (240,285)), 680, 1100, 2),
       "UIIA": (1800, 310, 1.5, 0.65, pygame.transform.scale(pygame.image.load("Images/f_UIIA.png").convert_alpha(), (240,285)), 1000, 1000, 69)
 }
-
+berry_heal=50
+hank_heal=80
+semibot_heal=-60
 xbox={"-":6,
       "L":2,
       "U":3,
@@ -63,7 +65,9 @@ ps={"-":4,
 act=xbox
 act2=xbox
 
-berry_heal=50
+
+
+
 nb_pers=len(pers)-1
 nb_pers_base=nb_pers
 
@@ -1001,10 +1005,10 @@ class Game :
                     if self.p_which[1]=="heal" :
                         self.player.PV+=300
                     elif self.p_which[1]=="speed" :
-                        self.player.base_speed*=1.5
+                        self.player.base_speed*=1.4
                         self.p_duration=self.ticks
                     elif self.p_which[1]=="damage" :
-                        self.player.damage_boost=1.25
+                        self.player.damage_boost=1.2
                         self.p_duration=self.ticks
                     elif self.p_which[1]=="ammo" :
                         self.player.ammo_boost=0
@@ -1017,10 +1021,10 @@ class Game :
                     if self.p_which[1]=="heal" :
                         self.player2.PV+=300
                     elif self.p_which[1]=="speed" :
-                        self.player2.base_speed*=1.3
+                        self.player2.base_speed*=1.4
                         self.p_duration=self.ticks
                     elif self.p_which[1]=="damage" :
-                        self.player2.damage_boost=1.25
+                        self.player2.damage_boost=1.2
                         self.p_duration=self.ticks
                     elif self.p_which[1]=="ammo" :
                         self.player2.ammo_boost=0
@@ -1189,16 +1193,15 @@ class Game :
                     player.furb2=(randint(0,1)-0.5)*2
                     player.furb22=(randint(0,1)-0.5)*2
                 elif pers=="Semibot" :
-                    player.PV-=60
+                    player.PV+=semibot_heal
                 player.duration_bullet=self.ticks
                 player.explosion=False
 
 
             if self.ticks-player.duration_bullet>capa[6] :
                 player.canshoot=True
-            elif self.ticks-player.duration_bullet>capa[5]+player.range :
+            elif self.ticks-player.duration_bullet>(capa[5]+player.range) :
                 player.shooting=False
-
 
             if pers=="Hank" :
                 if player.shooting :
@@ -1217,7 +1220,7 @@ class Game :
                             player_adv.i_death=3*self.block
                             if self.rumb :
                                 player_adv.joy.rumble(1,1,1000)
-                            player.PV+=80
+                            player.PV+=hank_heal
                             player.duration_bullet=self.ticks-capa[5]
             
             elif pers=="Berry" :
@@ -1442,7 +1445,7 @@ class Game :
                                         player.PV+=capa[1]*player.damage_boost*0.2*player.powerlift
                                         player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                                     elif bullet.power[x]==2 :
-                                        player_adv.PV-=capa[1]*player.damage_boost*1.25*player.powerlift
+                                        player_adv.PV-=capa[1]*player.damage_boost*1.2*player.powerlift
                                     else :
                                         player_adv.PV-=capa[1]*player.damage_boost*player.powerlift
                                         player.ammo+=1
@@ -1458,7 +1461,10 @@ class Game :
                     if collision :
                         bullet.x=-bullet.x
                         bullet.updatex()
-                        player.range=min(player.range+50, 500)
+                        if player.range<310 :
+                            player.range+=100
+                        
+
                     
                     bullet.updatey()
                     collision=False
@@ -1468,8 +1474,8 @@ class Game :
                     if collision :
                         bullet.y=-bullet.y
                         bullet.updatey()
-                        player.range=min(player.range+50, 500)
-                    
+                        if player.range<310 :
+                            player.range+=100
                     if not player.hitwall :
                         bullet.draw(self.screen)
                         if player_adv.rect.colliderect(bullet) :
@@ -1583,9 +1589,10 @@ class Game :
                                 player.PV+=60   
                                 player.ammo+=1 
                             elif self.n==1 :
-                                k_damage=1.25
+                                k_damage=1.2
                             elif self.n==2 :
                                 player.time_effect=self.ticks
+                                k_damage=0.5
                             elif self.n==3 :
                                 if randint(1,10)==1 :
                                     k_damage=5
@@ -1610,14 +1617,14 @@ class Game :
                             
                                 
 
-                if self.ticks-player.time_effect<1200 :
-                    player.modif=0
+                if self.ticks-player.time_effect<1400 :
+                    player_adv.modif=0
                     if self.rumb :
                         player.joy.rumble(1,1,1)
                     player.one_time=False
                 else :
                     if not player.one_time :
-                        player.modif=1  
+                        player_adv.modif=1  
                         player.one_time=True
 
             elif pers=="MiraDraco" :
@@ -1639,7 +1646,7 @@ class Game :
                                 player_adv.joy.rumble(1,1,1000)
                             player.duration_bullet=self.ticks-capa[5]
 
-                if self.ticks-player.time_effect<1500 :
+                if self.ticks-player.time_effect<700 :
                     player.modif=0
                     if self.rumb :
                         player.joy.rumble(1,1,1)
@@ -1674,16 +1681,15 @@ class Game :
                 if player.flames>0 :
                     if self.ticks_flammes[0]!=int((self.ticks-self.ticks_flammes[1])/1000) :
                         self.ticks_flammes[0]+=1
-                        damage_f=max(round(player.flames/3,1), 20)
+                        damage_f=max(round(player.flames/3,1), 15)
                         player_adv.PV-=damage_f
-                        player.flames-=damage_f
+                        player.flames=round(player.flames-damage_f, 1)
                         if player.flames<0 :
                             player.flames=0
                         player_adv.i_death=1*self.block
                         if self.rumb :
                             player_adv.joy.rumble(0.7,0.7,500)
 
-                print(player.flames)
             elif pers=="..." :
                 if player.shooting :
                     for mur in self.murs :
