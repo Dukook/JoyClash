@@ -2,28 +2,43 @@ import pygame
 from math import cos, sin, radians
 from random import randint
 
-angle_diff=12
+angle_diff=15
+
 class Bullet :
     def __init__(self, brawleur, block, speed):
         self.block=block
         self.speed=speed
-        
-        if brawleur!="Owleaf" :
-            self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
-            scaling=(block/2)/(self.image.get_height())
-            self.image=pygame.transform.scale_by(self.image, scaling)
-            
-        else :
+        if brawleur=="Owleaf" :
             self.image=[]
-            scaling=(block/2)/(pygame.image.load(f"Images/a_{brawleur}_0.png").convert_alpha().get_height())
+            scaling=(block/2.5)/(pygame.image.load(f"Images/a_{brawleur}_0.png").convert_alpha().get_height())
             for x in range(3) :
                 self.image.append(pygame.transform.scale_by(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), scaling))
-        
-        
+            
+        elif brawleur=="Paper Dukook" :
+            self.image=[]
+            for x in range(8) :
+                self.image.append(pygame.transform.scale(pygame.image.load(f"Images/a_{brawleur}_{x}.png").convert_alpha(), (1.2*self.block, 1.2*self.block)))
+        else :
+            try : 
+                self.image=pygame.image.load(f"Images/a_{brawleur}.png").convert_alpha()
+            except :
+                self.image=pygame.transform.rotate(pygame.image.load(f"Images/goat_Surge.png").convert_alpha(),90)
+            scaling=(block/2)/(self.image.get_height())
+            self.image=pygame.transform.scale_by(self.image, scaling)
+            self.rect=self.image.get_rect(x=-1000, y=-1000)
+
     def settings(self, x, y, angle, acc) :
         if not acc :
             angle+=randint(-30, 30)
         self.image2=pygame.transform.rotate(self.image, angle)
+        self.rect=self.image2.get_rect(x=x+self.block/2-self.image2.get_width()/2, y=y+self.block/2-self.image2.get_height()/2)
+        self.x=cos(radians(angle))*self.block/(3*self.speed)
+        self.y=-sin(radians(angle))*self.block/(3*self.speed)
+
+    def settings_paper(self, x, y, angle, acc, n) :
+        if not acc :
+            angle+=randint(-30, 30)
+        self.image2=pygame.transform.rotate(self.image[n], angle)
         self.rect=self.image2.get_rect(x=x+self.block/2-self.image2.get_width()/2, y=y+self.block/2-self.image2.get_height()/2)
         self.x=cos(radians(angle))*self.block/(3*self.speed)
         self.y=-sin(radians(angle))*self.block/(3*self.speed)
@@ -59,6 +74,13 @@ class Bullet :
                 temprect.y+=self.y[x]
                 self.rect[x]=temprect
 
+    def updatex(self) :
+        self.rect.x+=self.x
+
+    def updatey(self) :
+        self.rect.y+=self.y
+        
+
     def draw(self, screen):
         screen.blit(self.image2, self.rect)
 
@@ -67,39 +89,3 @@ class Bullet :
             if self.dagues[x] :
                 screen.blit(self.image2[x], self.rect[x])
 
-class Surge :
-
-    def __init__(self, block):
-        self.block=block
-        
-        self.image=pygame.transform.scale(pygame.image.load("Images/boom.png").convert_alpha(), (3*block, 3*block))
-
-    def settings(self, x, y) :
-        self.rect=pygame.rect.Rect(x-self.block, y-self.block, 3*self.block, 3*self.block)
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)
-
-class Berry :
-
-    def __init__(self, block):
-        self.block=block
-        self.image=pygame.transform.scale(pygame.image.load("Images/ice_cream.png").convert_alpha(), (2.5*block, 2.5*block))
-
-    def settings(self, x, y) :
-        self.rect=pygame.rect.Rect(x-0.75*self.block, y-0.75*self.block, 2.5*self.block, 2.5*self.block)
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)
-
-class Spookie :
-
-    def __init__(self, block):
-        self.block=block
-        self.image=pygame.transform.scale(pygame.image.load("Images/Cookie.png").convert_alpha(), (5*block, 5*block))
-
-    def settings(self, x, y) :
-        self.rect=pygame.rect.Rect(x-2*self.block, y-2*self.block, 5*self.block, 5*self.block)
-
-    def draw(self, screen) :
-        screen.blit(self.image, self.rect)

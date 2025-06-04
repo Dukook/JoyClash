@@ -1,26 +1,44 @@
 import pygame
 from pygame.math import Vector2
-from os import chdir
+from os import chdir, getcwd
 
-chdir("Files")
+try :
+    chdir("Files")
+except :
+    pass
+if not "Files" in getcwd() :
+    print("Wrong path")
+    pygame.time.delay(2000)
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
-capa={"Hank" : (1320, 210, 0.9, 1.2),
-      "Berry": (1000, 230, 1.1, 1.2),
-      "Surge": (1260, 225, 0.9, 1.3),
-      "Carroje": (1080, 280, 0.8, 1.7),
-      "Popofox": (1150, 155, 1.2, 0.6),
-      "Spookie": (1220, 150, 1.0, 1.0),
-      "Mushy": (1050, 130, 1.05, 1.5),
-      "Bubule": (1400, 200, 0.85, 0.9),
-      "Chick'n bob": (950, 37, 1.0, 0.9),
-      "Owleaf": (1300, 170, 1.1, 1.1),
-      "UIIA": (1800, 310, 1.5, 0.65)
+
+# "nom" : [PV, Damage, speed, bulletspeed, range, spam, nb_bullet]
+capa={"Hank" : (1320, 240, 0.9, 1.2,700, 1300, 6),
+      "Berry": (1000, 230, 1.1, 1.2, 600, 1200, 5),
+      "Surge": (1260, 225, 0.9, 1.3, 650, 1300, 6),
+      "Carroje": (1080, 280, 0.8, 1.7, 1200, 1300, 4),
+      "Popofox": (1150, 155, 1.2, 0.6, 450, 700, 18),
+      "Spookie": (1220, 150, 1.0, 1.0, 650, 1400, 5),
+      "Mushy": (1050, 130, 1.05, 1.1, 500, 1450, 8),
+      "Bubule": (1400, 200, 0.85, 0.9, 600, 1000, 10),
+      "Chick'n bob": (950, 37, 1.25, 0.9, 500, 1100, 7),
+      "Owleaf": (1300, 170, 1.0, 1.1, 650, 1450, 3),
+      "Squeak": (1350, 180, 0.9, 1.0, 800, 1310, 5),
+      "Furbok": (1500, 310, 0.75, 0.7, 700, 2200, 2),
+      "Zipit": (1220, 280, 1.0, 0.8, 650, 1500, 3),
+      "Semibot": (1330, 260, 1.2, 0.85, 750, 1250, 5),
+      "Chauss-être": (1180, 8, 1.1, 1.0, 200, 450, 6),
+      "Paper Dukook": (1200, 180, 1.1, 1.1, 720, 1200, 8),
+      "MiraDraco": (1340, 220, 0.9, 0.8, 700, 1450, 4),
+      "Pyroxis": (1210, 160, 1.1, 0.9, 500, 1000, 4),
+      "...": (500, 190, 0.9, 1.0, 680, 1100, 2),
+      "UIIA": (1800, 310, 1.5, 0.65, 1300, 1300, 69)
 }
 
 class Player :
-    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi):
+    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi, act):
+        self.act=act
         self.block=block
         self.pers=perso
         self.capa=capa[perso]
@@ -33,8 +51,7 @@ class Player :
         self.rect=self.image.get_rect(x=x,y=y)
 
         self.vise=pygame.image.load("Images/vise3.png").convert_alpha()
-        self.rect_vise=self.vise.get_rect(x=0, y=0)
-        self.vise=pygame.transform.scale(self.vise, (20*self.block,10*self.block))
+        self.vise=pygame.transform.scale(self.vise, ((self.capa[4]*self.block)*0.032/self.capa[3],10*self.block))
 
         
 
@@ -43,10 +60,13 @@ class Player :
         
         self.PV=self.capa[0]
         self.speed=2
+        self.slow=1
         self.stamina=2500
         self.can=True
+        self.canvibr=True
         self.stamina_speed=1
-        self.reloading=False
+        self.reloading=False#jamais utilisé yet
+        self.ammo=self.capa[6]
         self.sprinting=False
         self.x1=x
         self.y1=y
@@ -56,18 +76,37 @@ class Player :
         self.ticks=0 
         self.shot_acc=[not not not not False, not True]#lol
         self.canshoot=True
+        self.shooting=False
+        self.canhit=True
+        self.hitwall=False
+        self.explosion=True
+        self.range=0
+        self.duration_bullet=-1000
+        self.time_effect=-1000
+        self.furb=0
+        self.furb2=1
+        self.furb22=1
         self.lock=False
         self.death=pygame.transform.scale(pygame.image.load("Images/death.png").convert_alpha(), (18*self.block, 18*self.block))
         self.i_death=0
         self.modif=1
         self.modif2=1
+        self.mute=1
+        self.damage_boost=1
+        self.powerlift=1.0
+        self.ammo_boost=1
+        self.one_time=False
+        self.bool_tp=False
+        self.tping=False
+        self.flames=0
         if j==0 :
-            self.stam_pos = (30,20, 100)
+            #            (xstam,ystam,xPV,xammo,xnammo,ynammo)
+            self.stam_pos = (30,20, 100, 160, 20, HEIGH-40)
             self.right,self.left=True, False
             self.axe_x1, self.axe_y1=1, 0
             self.death=pygame.transform.rotate(self.death, -90)
         else :
-            self.stam_pos = (WIDTH-80, 20, WIDTH-150)
+            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-190, WIDTH-420, HEIGH-40)
             self.right,self.left=False, True
             self.axe_x1, self.axe_y1=-1, 0
             self.death=pygame.transform.rotate(self.death, 90)
@@ -76,25 +115,38 @@ class Player :
 
         self.up, self.down=False, False
 
+        self.tp=pygame.transform.scale(pygame.image.load("Images/tp.png").convert_alpha(), (self.block, self.block))
+        self.tp_pos=self.tp.get_rect(x=-1000, y=-1000)
+
 
     def event(self) :
-        lock=self.joy.get_button(5)
-        shoot=self.joy.get_button(1)
-        sprint=self.joy.get_button(0)
-        vibr=self.joy.get_button(2)
-        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2
-        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2
+        lock=self.joy.get_button(self.act["N"])
+        shoot=self.joy.get_button(self.act["R"])*self.mute
+        sprint=self.joy.get_button(self.act["D"])
+        vibr=self.joy.get_button(self.act["L"])
+        self.axe_x1=self.joy.get_axis(0)*self.modif*self.modif2*self.furb2*self.slow
+        self.axe_y1=self.joy.get_axis(1)*self.modif*self.modif2*self.furb22*self.slow
         self.vec = Vector2(self.axe_x1,self.axe_y1)
         self.rad, self.angle = self.vec.as_polar() # le rad est inutile mais je veux pas ça crash
-        self.ajusted_angle = (360-self.angle) % 360
+        self.ajusted_angle = (360-self.angle+self.furb) % 360
         
 
         
         
 
         
-        if vibr :
-            self.joy.rumble(1,1,1)
+        if vibr and self.canvibr and self.ammo!=self.capa[6] and self.can and not self.reloading:
+            
+            self.reloading=True
+            self.time_reloading=pygame.time.get_ticks()
+            if self.pers=="MiraDraco" :
+                self.x1=self.tp_pos.x
+                self.y1=self.tp_pos.y
+                self.move_x(self.x1)
+                self.move_y(self.y1)
+                self.bool_tp=False
+                self.tping=True
+
 
         #direction joueur
         self.right=bool(self.axe_x1>self.zone_morte)
@@ -105,7 +157,6 @@ class Player :
 
         self.up=bool(self.axe_y1<-self.zone_morte)
 
-
         
         #recharge stamina plus élevé si le joueur ne bouge pas
         if (not self.up and not self.down and not self.right and not self.left):
@@ -115,7 +166,7 @@ class Player :
             self.stamina_speed=4
 
         #variation de l'endurance
-        if sprint and not lock and self.stamina>=20 and self.can and (self.left or self.up or self.right or self.down):
+        if sprint and not lock and self.stamina>=20 and self.can and (self.left or self.up or self.right or self.down) and not self.reloading:
             self.stamina-=20
             self.sprinting=True
         else :
@@ -124,8 +175,11 @@ class Player :
                 self.stamina+=self.stamina_speed
                 if self.stamina>5000 :
                     self.stamina=5000
-                    
-        self.can=bool(self.stamina>=1000)
+        
+        if self.stamina<100 :
+            self.can=False
+        elif self.stamina>=1000 :
+            self.can=True
         
 
         #variation de vitesse
@@ -137,25 +191,34 @@ class Player :
             self.speed=0.115
 
         #déplacements
-        if self.right and self.x1<self.WIDTH-self.block and not lock:
+        if self.right and not lock:
             self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
             self.stamina_speed=2
-        elif self.left and self.x1>0 and not lock :
+        elif self.left and not lock :
             self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
             self.stamina_speed=2
 
-        if self.down and self.y1<self.HEIGH-self.block and not lock :
+        if self.down and not lock :
             self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
             self.stamina_speed=2
-        elif self.up and self.y1>0 and not lock :
+        elif self.up and not lock :
             self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
             self.stamina_speed=2
 
         #shoot
-        if shoot and self.canshoot and self.ajusted_angle!=None:
-            self.shot_acc=[True, lock]
+        if shoot and self.canshoot and self.ajusted_angle!=None and not self.reloading:
+            if self.ammo>0 :
+                self.shot_acc=[True, lock]
+                if self.pers=="MiraDraco" and self.ammo==self.capa[6] :
+                    self.tp_pos.center=self.rect.center
+                    self.bool_tp=True
+                self.ammo-=1*self.ammo_boost
+                
+            else :
+                self.joy.rumble(0.5,0.5,500)
 
         self.lock=bool(self.ajusted_angle!=None and lock)
+
             
         #les print qui carry
         '''if self.j==0 :
@@ -165,7 +228,7 @@ class Player :
     def update(self) :
         self.radius=int(self.stamina//200)
         self.color=(max(255-self.stamina//15,0), max(min(self.stamina//4-300,255),0), 0)
-        if self.pers!="UIIA" :
+        if self.pers!="UIIA" and self.pers!="Paper Dukook":
             if self.up and abs(self.axe_y1)>abs(self.axe_x1) :
                 self.new_image=self.image
             elif self.left and abs(self.axe_x1)>abs(self.axe_y1) :
@@ -187,6 +250,13 @@ class Player :
         else :
             self.pos_death=((20*self.block+self.PV/self.capa[0]*12*self.block)-self.i_death, 0)
 
+        if self.reloading :
+            self.joy.rumble(0.5,0.5,1)
+            if pygame.time.get_ticks()-self.time_reloading>3000 :
+                self.reloading=False
+                self.canvibr=True
+                self.ammo=self.capa[6]
+
 
     def move_x(self, x1):
         self.tx1=self.rect.x
@@ -202,6 +272,7 @@ class Player :
         self.y1=ty1
         self.rect.y=self.y1
 
+
     def draw(self, screen):
         #pers 1ligne btw
         screen.blit(self.new_image, self.rect)
@@ -212,7 +283,6 @@ class Player :
             self.vise2=pygame.transform.rotate(self.vise, self.ajusted_angle)
             l_v=[self.vise2.get_width(), self.vise2.get_height()]
             screen.blit(self.vise2, (self.rect.x-l_v[0]/2+self.block/2,self.rect.y-l_v[1]/2+self.block/2))
-
 
         #mort
         screen.blit(self.death, self.pos_death)
@@ -238,8 +308,19 @@ class Player :
             self.ticks=0
 
         #les PV
-        text_PV = font.render(str(int(self.PV)), True, "orange")
+        text_PV = font.render(str(int(self.PV)), True, "red")
         screen.blit(text_PV, (self.stam_pos[2], self.stam_pos[1]*1.8))
+
+        #les munitions
+        text_ammo = font.render(str(int(self.ammo)), True, "orange")
+        screen.blit(text_ammo, (self.stam_pos[3], self.stam_pos[1]*1.8))
+
+        #new ammo
+        if self.ammo>1 :
+            pygame.draw.rect(screen, "gold", (self.stam_pos[4], self.stam_pos[5], self.ammo/self.capa[6]*400, 20))
+        else :
+            pygame.draw.rect(screen, "orangered", (self.stam_pos[4], self.stam_pos[5], self.ammo/self.capa[6]*400, 20))
+        pygame.draw.rect(screen, "ghostwhite", (self.stam_pos[4], self.stam_pos[5], 400, 20), 2)
 
         
 
