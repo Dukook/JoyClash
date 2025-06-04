@@ -2,8 +2,13 @@ import pygame
 from pygame.math import Vector2
 from os import chdir, getcwd
 
-print(getcwd())
-
+try :
+    chdir("Files")
+except :
+    pass
+if not "Files" in getcwd() :
+    print("Wrong path")
+    pygame.time.delay(2000)
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 

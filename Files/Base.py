@@ -4,17 +4,20 @@ from Player import Player
 from Bullet import *
 from Account import Choice, Write
 
-
-"""info_P1, pseudo_P1=Choice(1)
-info_P2, pseudo_P2=Choice(2)"""
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
-
-
-
-
 pygame.init()
+
+
+"""info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'"""
+
+if pygame.joystick.get_count() >= 2 :
+    info_P1, pseudo_P1=Choice(1)
+    info_P2, pseudo_P2=Choice(2)
+
+
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
+screen.blit(pygame.transform.scale(pygame.image.load("Images/logo.png").convert_alpha(), (800, 600)), (0,0))
+pygame.display.flip()
 
 star=[1,2,2,2,3,4,5,6]
 star_ammo=[0,0,3,4,5,6,7,7,7]
@@ -105,6 +108,8 @@ class Menu :
         self.OO=pygame.transform.scale_by(pygame.image.load("Images/OO.png").convert(), 3)
         self.CG=pygame.transform.scale_by(pygame.image.load("Images/CG.png").convert(), 3)
         self.RD=pygame.transform.scale_by(pygame.image.load("Images/RD.png").convert(), 3)
+        self.xbox=pygame.transform.scale_by(pygame.image.load("Images/xbox.png").convert_alpha(), 0.12)
+        self.ps= pygame.transform.scale_by(pygame.image.load("Images/ps.png").convert_alpha(), 0.16)
 
         #compte des manettes connectés
         global sett
@@ -123,8 +128,12 @@ class Menu :
                 if sett[5] :
                     self.joy1,self.joy2=self.joy2,self.joy1
             print(f"There is {count} controllers connected")
+            
         else :
             print(f"Need more controllers. {count} controllers connected instead of 2")
+            pygame.time.delay(2000)
+
+        
             
         #setup menu
             
@@ -593,6 +602,19 @@ class Menu :
                 self.screen.blit(self.ready, (60, 370))
             if self.play2 and self.canplay2:
                 self.screen.blit(self.ready, (490, 370))
+
+            #info prix
+            self.screen.blit(font.render("Fighters cost 10 coins", True, (255,10,200)), (302, 428))
+
+            #info controller
+            if act==ps :
+                self.screen.blit(self.ps, (260, 20))
+            elif act==xbox :
+                self.screen.blit(self.xbox, (260, 20))
+            if act2==ps :
+                self.screen.blit(self.ps, (475, 20))
+            elif act2==xbox :
+                self.screen.blit(self.xbox, (475, 20))
 
             #logo
             self.screen.blit(self.logo, (350, -10))
@@ -1920,7 +1942,7 @@ while running :
 
     if play :
         WIDTH, HEIGHT = sett[3], sett[4]
-        screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
         game=Game(screen)
         game.run()
     else :
