@@ -261,13 +261,13 @@ class Menu :
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == pygame.KEYDOWN :
-                    if (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT) and act==ps :
+                    if (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT or event.key == pygame.K_l) and act==ps :
                         act=xbox
-                    elif (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT) and act==xbox :
+                    elif (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT or event.key == pygame.K_l) and act==xbox :
                         act=ps
-                    if (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT) and act2==ps :
+                    if (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT or event.key == pygame.K_r) and act2==ps :
                         act2=xbox
-                    elif (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT) and act2==xbox :
+                    elif (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT or event.key == pygame.K_r) and act2==xbox :
                         act2=ps
 
 
