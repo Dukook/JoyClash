@@ -261,13 +261,13 @@ class Menu :
                 if event.type == pygame.QUIT:
                     self.running = False
                 if event.type == pygame.KEYDOWN :
-                    if event.key == pygame.K_KP1 and act==ps :
+                    if (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT) and act==ps :
                         act=xbox
-                    elif event.key == pygame.K_KP1 and act==xbox :
+                    elif (event.key == pygame.K_KP1 or event.key == pygame.K_LEFT) and act==xbox :
                         act=ps
-                    if event.key == pygame.K_KP2 and act2==ps :
+                    if (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT) and act2==ps :
                         act2=xbox
-                    elif event.key == pygame.K_KP2 and act2==xbox :
+                    elif (event.key == pygame.K_KP2 or event.key == pygame.K_RIGHT) and act2==xbox :
                         act2=ps
 
 
@@ -574,7 +574,7 @@ class Menu :
 
             self.screen.blit(self.coin, (690,480))
             if info_P2!=None :
-                if int(info_P1[1])>10000 :
+                if int(info_P2[1])>10000 :
                     self.screen.blit(font.render("∞", True, "yellow"), (660, 540))
                 else :
                     decal_coin=font.render(info_P2[1], True, "yellow")
@@ -1839,6 +1839,9 @@ class Game :
             #info player
             self.player.drawstuff(self.screen)
             self.player2.drawstuff(self.screen)
+            self.screen.blit(font.render(pseudo_P1, True, (255, 255, 255)), (100, 10))
+            t=font.render(pseudo_P2, True, (255, 255, 255))
+            self.screen.blit(t, (WIDTH-110-t.get_width(), 10))
 
             if self.emt :
                 self.screen.blit(self.down, (self.player.x1-self.block/2, self.player.y1-self.block/2))
