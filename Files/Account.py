@@ -89,8 +89,8 @@ def Create(j) :
 def Write(pseudo, pers, coin) :
     info=lire(pseudo)
     final=open(f'Saves/{pseudo}.txt','w')
-    new_coin=int(info[1])
-    new_coin+=coin
+    new_coin=int(info[1])+coin
+    info[1]=str(new_coin)
     if pers !=None :
         info[pers]=True
     new_info=""

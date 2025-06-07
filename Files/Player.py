@@ -1,14 +1,10 @@
 import pygame
 from pygame.math import Vector2
-from os import chdir, getcwd
+from os import chdir
+from pathlib import Path
 
-try :
-    chdir("Files")
-except :
-    pass
-if not "Files" in getcwd() :
-    print("Wrong path")
-    pygame.time.delay(2000)
+chdir(str(Path(__file__).resolve().parent))
+
 pygame.font.init()
 font = pygame.font.Font("Others/arial.ttf", 20)
 
@@ -106,7 +102,7 @@ class Player :
             self.axe_x1, self.axe_y1=1, 0
             self.death=pygame.transform.rotate(self.death, -90)
         else :
-            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-190, WIDTH-420, HEIGH-40)
+            self.stam_pos = (WIDTH-80, 20, WIDTH-150, WIDTH-185, WIDTH-420, HEIGH-40)
             self.right,self.left=False, True
             self.axe_x1, self.axe_y1=-1, 0
             self.death=pygame.transform.rotate(self.death, 90)
@@ -308,7 +304,7 @@ class Player :
             self.ticks=0
 
         #les PV
-        text_PV = font.render(str(int(self.PV)), True, "red")
+        text_PV = font.render(str(int(self.PV)), True, 	(255, 240, 0))
         screen.blit(text_PV, (self.stam_pos[2], self.stam_pos[1]*1.8))
 
         #les munitions
