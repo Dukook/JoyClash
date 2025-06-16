@@ -1,4 +1,4 @@
-
+from random import shuffle
 psd=None
 
 def lire(who) :
@@ -101,3 +101,42 @@ def Write(pseudo, pers, coin) :
     final.close()
     info=lire(pseudo)
     return info, pseudo
+
+def Tour() :
+    ans=input("Do you want to do a tournament ?\n\n - ").lower()
+    if ans=="y" or ans=="ye" or ans=="yes" :
+        ans=input("How many players ?\n\n - ")
+        loop=True
+        while loop :
+            if ans.lower()=="exit" :
+                return [False]
+            try :
+                n=int(ans)
+                if n>=2 : 
+                    loop=False
+                else :
+                    ans=input("Need more player obviously\n\n - ")
+            except :
+                ans=input("Does be an integer value\n\n - ")
+
+        tab=[True, n]
+        players=[]
+        for x in range(n):
+            loop=True
+            a=input(f"Enter player {x+1} name\n\n - ")
+            while loop :    
+                if not a in players :
+                    players.append(a)
+                    loop=False
+                else :
+                    a=input(f"Enter player {x+1} name,\nthis should be a different name\n\n - ")
+        shuffle(players)
+        tab.append(players)
+        ans=input("Invisible man ?\n\n - ").lower()
+        if ans=="y" or ans=="ye" or ans=="yes" :
+            tab.append(True)
+        else :
+            tab.append(False)
+        return tab
+    else :
+        return [False]

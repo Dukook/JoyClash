@@ -2,15 +2,27 @@ import pygame
 from random import randint
 from Player import Player
 from Bullet import *
-from Account import Choice, Write
+from Account import Choice, Write, Tour
 
 pygame.init()
 
 
 """info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
 info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'"""
+tab=Tour()
 
-if pygame.joystick.get_count() >= 2 :
+if tab[0] :
+    players=tab[2]
+    stages=[players]
+    stage_pos=1
+    nb_fight=[0,(len(players)//2)-1]
+    player_next=[]
+    if len(players)%2!=0 :
+        player_next.append(players[-1])
+    info_P1=["0", "0", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", str(tab[3]), "False"]
+    info_P2=["0", "0", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", str(tab[3]), "False"]
+
+elif pygame.joystick.get_count() >= 2:
     info_P1, pseudo_P1=Choice(1)
     info_P2, pseudo_P2=Choice(2)
 
@@ -72,6 +84,8 @@ act2=xbox
 
 
 nb_pers=len(pers)-1
+if tab[0] :
+    nb_pers-=1
 nb_pers_base=nb_pers
 
 FPS=45
@@ -79,6 +93,28 @@ sett=[]
 
 class Menu :
     def __init__(self, screen, change):
+        if tab[0] :
+            global stages, stage_pos, player_next, players, nb_fight
+            gay=True
+            if nb_fight[0]>nb_fight[1] :
+                print(nb_fight)
+                stages.append(player_next)
+                players=stages[stage_pos]
+                print(players)
+                if len(players)>=2 :
+                    stage_pos+=1
+                    player_next=[]
+                    if len(players)%2!=0 :
+                        player_next.append(players[-1])
+                    nb_fight=[0,(len(players)//2)-1]
+                else :
+                    print(f"{players[0]} win !")
+                    gay=False
+            if gay :
+                global pseudo_P1, pseudo_P2
+                pseudo_P1=players[nb_fight[0]*2]
+                pseudo_P2=players[nb_fight[0]*2+1]
+                nb_fight[0]+=1
         #setup de base
         self.screen=screen
         self.clock=pygame.time.Clock()
@@ -283,24 +319,25 @@ class Menu :
             UIIA=pygame.key.get_pressed()
             vibr=self.joy1.get_button(act["L"])
             vibr2=self.joy2.get_button(act2["L"])
-            if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
-                self.can_swapp=False
-                global nb_pers
-                if nb_pers==nb_pers_base :
-                    nb_pers+=1
-                else :
-                    nb_pers=nb_pers_base
-                    if self.pick1==nb_pers_base : #car l'indice est moins 1 par rapport au nb mais plus 1par rapport au max sans UIIA
-                        self.pick1=0
-                        if self.pick1==self.pick2 :
-                            self.pick1+=1
-                    elif self.pick2==nb_pers_base :
-                        self.pick2=0
-                        if self.pick1==self.pick2 :
-                            self.pick2+=1
+            if not tab[0] :
+                if UIIA[pygame.K_u] and UIIA[pygame.K_i] and UIIA[pygame.K_a] and UIIA[pygame.K_SPACE] and self.can_swapp:
+                    self.can_swapp=False
+                    global nb_pers
+                    if nb_pers==nb_pers_base :
+                        nb_pers+=1
+                    else :
+                        nb_pers=nb_pers_base
+                        if self.pick1==nb_pers_base : #car l'indice est moins 1 par rapport au nb mais plus 1par rapport au max sans UIIA
+                            self.pick1=0
+                            if self.pick1==self.pick2 :
+                                self.pick1+=1
+                        elif self.pick2==nb_pers_base :
+                            self.pick2=0
+                            if self.pick1==self.pick2 :
+                                self.pick2+=1
 
-            if not UIIA[pygame.K_SPACE]:
-                self.can_swapp=True
+                if not UIIA[pygame.K_SPACE]:
+                    self.can_swapp=True
 
             if self.srumb :
 
@@ -692,7 +729,7 @@ class Game :
         self.p_ammo=pygame.transform.scale(pygame.image.load("Images/p_ammo.png").convert_alpha(), (self.block, self.block))
         self.p_love=pygame.transform.scale(pygame.image.load("Images/p_love.png").convert_alpha(), (self.block, self.block))
         self.spawn=pygame.transform.scale(pygame.image.load("Images/spawn.png").convert_alpha(), (2*self.block, 2*self.block))
-        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_heal, "heal"), (self.p_ammo, "ammo"), (self.p_love, "love")]
+        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_heal, "heal"), (self.p_heal, "heal"), (self.p_ammo, "ammo"), (self.p_love, "love")]
         self.p_on_stage=[False,pygame.time.get_ticks()+randint(6000, 8000)]
         self.p_how_long=-5000
 
@@ -1134,24 +1171,30 @@ class Game :
             #condition de fin
 
             if self.player.PV<=0 or self.player2.PV<=0 :
+                global player_next, pseudo_P1, pseudo_P2
                 if self.player.PV<=0 and self.player2.PV<=0 :
                     self.winner="draw"
                     reward=[6,6]
                 elif self.player.PV<=0 :
                     self.winner="green"
                     reward=[3,10]
+                    if tab[0] :
+                        player_next.append(pseudo_P2)
                 else :
                     self.winner="blue"
                     reward=[10,3]
+                    if tab[0] :
+                        player_next.append(pseudo_P1)
                 self.plan="end"
                 self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME)
                 self.screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
                 self.stop=False
-                global info_P1, info_P2, pseudo_P1, pseudo_P2
-                if pseudo_P1 !=None :
-                    info_P1, pseudo_P1=Write(pseudo_P1, None, reward[0])
-                if pseudo_P2 !=None :
-                    info_P2, pseudo_P2=Write(pseudo_P2, None, reward[1])
+                if not tab[0] :
+                    global info_P1, info_P2
+                    if pseudo_P1 !=None :
+                        info_P1, pseudo_P1=Write(pseudo_P1, None, reward[0])
+                    if pseudo_P2 !=None :
+                        info_P2, pseudo_P2=Write(pseudo_P2, None, reward[1])
                 pygame.mixer.music.stop()
                 pygame.mixer.music.load("Songs/vct.mp3")
                 pygame.mixer.music.set_volume(self.son*2)
@@ -1873,7 +1916,13 @@ class Game :
             
 
         elif self.plan=="end" :
-            
+
+            if self.winner=="blue" :
+                t=font.render(pseudo_P2, True, (255, 255, 255))
+                self.screen.blit(t, (400-t.get_width(), 10))
+            elif self.winner=="green" :
+                t=font.render(pseudo_P2, True, (255, 255, 255))
+                self.screen.blit(t, (400-t.get_width(), 10))
 
             
 
@@ -1897,6 +1946,11 @@ class Game :
         elif self.plan=="pause" :
             if not pygame.mixer.music.get_busy() :
                 pygame.mixer.music.play()
+            
+                        
+            self.screen.blit(font.render(pseudo_P1, True, (255, 255, 255)), (100, 10))
+            t=font.render(pseudo_P2, True, (255, 255, 255))
+            self.screen.blit(t, (800-110-t.get_width(), 10))
             
             screen.blit(self.draw, (100,100))
             screen.blit(self.draw2, (460,100))
