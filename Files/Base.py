@@ -144,6 +144,7 @@ class Menu :
         self.OO=pygame.transform.scale_by(pygame.image.load("Images/OO.png").convert(), 3)
         self.CG=pygame.transform.scale_by(pygame.image.load("Images/CG.png").convert(), 3)
         self.RD=pygame.transform.scale_by(pygame.image.load("Images/RD.png").convert(), 3)
+        self.ZG=pygame.transform.scale_by(pygame.image.load("Images/ZG.png").convert(), 3)
         self.xbox=pygame.transform.scale_by(pygame.image.load("Images/xbox.png").convert_alpha(), 0.12)
         self.ps= pygame.transform.scale_by(pygame.image.load("Images/ps.png").convert_alpha(), 0.16)
 
@@ -209,10 +210,6 @@ class Menu :
         pygame.mixer.music.load("Songs/loby.mp3")
         pygame.mixer.music.set_volume(self.son/100)
         pygame.mixer.music.play()
-
-
-
-        
 
     def event(self) :
 
@@ -407,6 +404,8 @@ class Menu :
                     elif self.map=="OO" :
                         self.map="CG"
                     elif self.map=="CG" :
+                        self.map="ZG"
+                    elif self.map=="ZG" :
                         self.map="RD"
                     else :
                         self.map="SS"
@@ -451,9 +450,6 @@ class Menu :
                 self.joy2.quit()
                 sett=[self.zone_morte/100, self.zone_morte2/100, self.son, self.WIDTH, self.HEIGHT, self.swap, self.pick1, self.pick2, self.map, self.srumb, self.color_ss]
                 return
-
-            
-
 
     def update(self):
         if not pygame.mixer.music.get_busy() :
@@ -511,20 +507,18 @@ class Menu :
             if self.map=="SS" :
                 self.map_color=["yellow", "white", "white", "white"]
                 self.map_pos=(715, 80)
-
             elif self.map=="OO" :
                 self.map_color=["white", "yellow", "white", "white"]
                 self.map_pos=(40, 410)
             elif self.map=="CG" :
                 self.map_color=["white", "white", "yellow", "white"]
                 self.map_pos=(715, 410)
-            else :
+            elif self.map=="ZG" :
                 self.map_color=["white", "white", "white", "yellow"]
+                self.map_pos=(-100, -100)
+            elif self.map=="RD" :
+                self.map_color=["yellow", "yellow", "yellow", "yellow"]
                 self.map_pos=(40, 80)
-            
-
-            
-
 
     def display(self) :
         self.screen.fill("black")
@@ -661,20 +655,19 @@ class Menu :
             self.screen.blit(self.SS, (12, 200))
             self.screen.blit(self.OO, (686, 200))
             self.screen.blit(self.CG, (12, 280))
-            self.screen.blit(self.RD, (686, 280))
+            self.screen.blit(self.ZG, (686, 280))
             self.screen.blit(font.render("Shooting", True, self.map_color[0]), (24, 140))
             self.screen.blit(font.render("Stars", True, self.map_color[0]), (38, 170))
             self.screen.blit(font.render("Out in", True, self.map_color[1]), (710, 140))
             self.screen.blit(font.render("the Open", True, self.map_color[1]), (698, 170))
             self.screen.blit(font.render("Canal", True, self.map_color[2]), (35, 350))
             self.screen.blit(font.render("Grande", True, self.map_color[2]), (30, 380))
-            self.screen.blit(font.render("Random", True, self.map_color[3]), (704, 350))
-            self.screen.blit(font.render("map", True, self.map_color[3]), (718, 380))
+            self.screen.blit(font.render("Zen", True, self.map_color[3]), (718, 350))
+            self.screen.blit(font.render("Garden", True, self.map_color[3]), (704, 380))
             
 
         pygame.display.flip()
         
-
     def run(self) :
         while self.running :
             self.event()
@@ -699,31 +692,33 @@ class Game :
         self.capa2=capa[self.pers2]
         self.map=sett[8]
 
-        self.evnt=randint(0,3)
+        self.evnt=randint(1,10)
 
         self.b_potion=1
         self.ot=1
         self.fast=1
-        if self.evnt==0 :
+        if self.evnt<=5 :
             self.name_event="Normal"
-        elif self.evnt==1 :
+        elif self.evnt<=7 :
             self.b_potion=2
             self.name_event="Potion unleash"
-        elif self.evnt==2 :
+        elif self.evnt<=8 :
             self.ot=2.5
             self.name_event="Over time"
-        elif self.evnt==3 :
+        elif self.evnt<=10 :
             self.fast=1.6
             self.name_event="Gotta go fast"
 
         if self.map=="RD" :
-            rand=randint(0,2)
+            rand=randint(0,3)
             if rand==0:
                 self.map="SS"
             elif rand==1 :
                 self.map="OO"
-            else :
+            elif rand==2 :
                 self.map="CG"
+            else :
+                self.map="ZG"
         #def d'un block
         self.block=WIDTH/32
         # écran + rafraichissement
@@ -824,7 +819,7 @@ class Game :
             self.p_pos.append((5*self.block, 4*self.block))
             self.p_pos.append((26*self.block, 13*self.block))
 
-        else :
+        elif self.map=="CG" :
             #encore plus de murs
             self.murs.append(pygame.Rect(3*self.block,5*self.block, 3*self.block, 1*self.block))
             self.murs.append(pygame.Rect(5*self.block,6*self.block, 1*self.block, 2*self.block))
@@ -879,10 +874,44 @@ class Game :
 
             self.p_pos.append((20*self.block, 6*self.block))
             self.p_pos.append((11*self.block, 11*self.block))
+        
+        elif self.map=="ZG" :
+            self.murs.append(pygame.Rect(0*self.block,0*self.block, 6*self.block, 2*self.block))
+            self.murs.append(pygame.Rect(0*self.block,5*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(0*self.block,12*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(0*self.block,16*self.block, 5*self.block, 2*self.block))
+            self.murs.append(pygame.Rect(9*self.block,0*self.block, 2*self.block, 2*self.block))
+            self.murs.append(pygame.Rect(9*self.block,5*self.block, 2*self.block, 6*self.block))
+            self.murs.append(pygame.Rect(11*self.block,8*self.block, 1*self.block, 3*self.block))
+            self.murs.append(pygame.Rect(9*self.block,13*self.block, 2*self.block, 5*self.block))
+            self.murs.append(pygame.Rect(11*self.block,17*self.block, 1*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(15*self.block,4*self.block, 1*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(14*self.block,5*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(16*self.block,12*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(16*self.block,13*self.block, 1*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(20*self.block,0*self.block, 1*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(21*self.block,0*self.block, 2*self.block, 5*self.block))
+            self.murs.append(pygame.Rect(20*self.block,7*self.block, 1*self.block, 3*self.block))
+            self.murs.append(pygame.Rect(21*self.block,7*self.block, 2*self.block, 6*self.block))
+            self.murs.append(pygame.Rect(21*self.block,16*self.block, 2*self.block, 2*self.block))
+            self.murs.append(pygame.Rect(27*self.block,0*self.block, 5*self.block, 2*self.block))
+            self.murs.append(pygame.Rect(30*self.block,5*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(30*self.block,12*self.block, 2*self.block, 1*self.block))
+            self.murs.append(pygame.Rect(26*self.block,16*self.block, 6*self.block, 2*self.block))
+
+            self.waters.append(pygame.Rect(0*self.block,2*self.block, 2*self.block, 3*self.block))
+            self.waters.append(pygame.Rect(0*self.block,13*self.block, 2*self.block, 3*self.block))
+            self.waters.append(pygame.Rect(14*self.block,10*self.block, 2*self.block, 4*self.block))
+            self.waters.append(pygame.Rect(16*self.block,4*self.block, 2*self.block, 4*self.block))
+            self.waters.append(pygame.Rect(30*self.block,2*self.block, 2*self.block, 3*self.block))
+            self.waters.append(pygame.Rect(30*self.block,13*self.block, 2*self.block, 3*self.block))
+
+            self.p_pos=[(16*self.block-self.block/2, 9*self.block-self.block/2), (5*self.block, 5*self.block), (26*self.block, 12*self.block), (5*self.block, 12*self.block), (26*self.block, 5*self.block), (12*self.block, 6*self.block), (19*self.block, 11*self.block), (12*self.block, 15*self.block), (19*self.block, 2*self.block)]
 
         self.SS=pygame.transform.scale(pygame.image.load("Images/t_SS.png").convert_alpha(), (WIDTH, HEIGHT))
         self.OO=pygame.transform.scale(pygame.image.load("Images/t_OO.png").convert_alpha(), (WIDTH, HEIGHT))
         self.CG=pygame.transform.scale(pygame.image.load("Images/t_CG.png").convert_alpha(), (WIDTH, HEIGHT))
+        self.ZG=pygame.transform.scale(pygame.image.load("Images/t_ZG.png").convert_alpha(), (WIDTH, HEIGHT))
         self.background=pygame.transform.scale(pygame.image.load("Images/background.png").convert_alpha(), (WIDTH, HEIGHT))
 
         #autres
@@ -936,9 +965,7 @@ class Game :
 
         self.bullet_P1=Bullet(self.pers, self.block, self.capa[3])
         self.bullet_P2=Bullet(self.pers2, self.block, self.capa2[3])
-
-        
-    
+  
     def event(self) :
 
         self.ticks=pygame.time.get_ticks()
@@ -1047,10 +1074,7 @@ class Game :
             stop2=bool(self.player.joy.get_button(act["-"]) or self.player2.joy.get_button(act2["-"]))
             if self.running ==True :
                 self.running=not bool(stop or stop2)
-                
-
-
-            
+                           
     def stat0(self) :
         self.player.damage_boost=1.0
         self.player.base_speed=self.capa[2]
@@ -1058,7 +1082,6 @@ class Game :
         self.player2.damage_boost=1.0
         self.player2.base_speed=self.capa2[2]
         self.player2.ammo_boost=1
-
 
     def update(self) :
         
@@ -1833,10 +1856,6 @@ class Game :
                         player_adv.modif=1  
                         player.one_time=True
                     
-            
-
-
-
     def display(self) :
         #écran fond noire
         
@@ -1893,8 +1912,10 @@ class Game :
                 self.screen.blit(self.OO, (0,0))
             elif self.map=="SS" :
                 self.screen.blit(self.SS, (0,0))
-            else :
+            elif self.map=="CG" :
                 self.screen.blit(self.CG, (0,0))
+            else :
+                self.screen.blit(self.ZG, (0,0))
             
             """for mur in self.murs :
                 pygame.draw.rect(self.screen, (255,10,200), mur, int(self.block/8))            
@@ -1948,11 +1969,11 @@ class Game :
         elif self.plan=="end" :
 
             if self.winner=="blue" :
-                t=font.render(pseudo_P2, True, (255, 255, 255))
-                self.screen.blit(t, (400-t.get_width(), 10))
+                t=font.render(pseudo_P1, True, (255, 255, 255))
+                self.screen.blit(t, (400-t.get_width()/2, 10))
             elif self.winner=="green" :
                 t=font.render(pseudo_P2, True, (255, 255, 255))
-                self.screen.blit(t, (400-t.get_width(), 10))
+                self.screen.blit(t, (400-t.get_width()/2, 10))
 
             
 
@@ -1993,12 +2014,6 @@ class Game :
             screen.blit(self.light, (0, -10))
             screen.blit(self.light2, (800-self.light2.get_width(), -10))
         
-
-
-        
-        
-
-
     def run(self) :
         while self.running :
             self.event()
