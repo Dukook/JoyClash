@@ -58,7 +58,7 @@ capa={"Hank" : (1320, 240, 0.9, 1.2, pygame.transform.scale(pygame.image.load("I
 }
 berry_heal=50
 hank_heal=80
-semibot_heal=-60
+semibot_damage=60
 xbox={"-":6,
       "L":2,
       "U":3,
@@ -698,6 +698,24 @@ class Game :
         self.pers2=pers[sett[7]]
         self.capa2=capa[self.pers2]
         self.map=sett[8]
+
+        self.evnt=randint(0,3)
+
+        self.b_potion=1
+        self.ot=1
+        self.fast=1
+        if self.evnt==0 :
+            self.name_event="Normal"
+        elif self.evnt==1 :
+            self.b_potion=2
+            self.name_event="Potion unleash"
+        elif self.evnt==2 :
+            self.ot=2.5
+            self.name_event="Over time"
+        elif self.evnt==3 :
+            self.fast=1.6
+            self.name_event="Gotta go fast"
+
         if self.map=="RD" :
             rand=randint(0,2)
             if rand==0:
@@ -717,8 +735,8 @@ class Game :
             j=[1,0]
         else :
             j=[0,1]
-        self.player=Player(1*self.block, 9*self.block, self.pers, sett[0], WIDTH, HEIGHT, 0, self.block, j[0], act)
-        self.player2=Player(30*self.block, 9*self.block, self.pers2, sett[1], WIDTH, HEIGHT, 1, self.block, j[1], act2)
+        self.player=Player(1*self.block, 9*self.block, self.pers, sett[0], WIDTH, HEIGHT, 0, self.block, j[0], act, self.ot, self.fast)
+        self.player2=Player(30*self.block, 9*self.block, self.pers2, sett[1], WIDTH, HEIGHT, 1, self.block, j[1], act2, self.ot, self.fast)
         self.plan="start"
 
         #potions
@@ -729,7 +747,7 @@ class Game :
         self.p_ammo=pygame.transform.scale(pygame.image.load("Images/p_ammo.png").convert_alpha(), (self.block, self.block))
         self.p_love=pygame.transform.scale(pygame.image.load("Images/p_love.png").convert_alpha(), (self.block, self.block))
         self.spawn=pygame.transform.scale(pygame.image.load("Images/spawn.png").convert_alpha(), (2*self.block, 2*self.block))
-        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_heal, "heal"), (self.p_heal, "heal"), (self.p_ammo, "ammo"), (self.p_love, "love")]
+        self.p_all=[(self.p_speed, "speed"), (self.p_damage, "damage"), (self.p_ammo, "ammo"), (self.p_love, "love"), (self.p_heal, "heal"), (self.p_heal, "heal")]
         self.p_on_stage=[False,pygame.time.get_ticks()+randint(6000, 8000)]
         self.p_how_long=-5000
 
@@ -1033,7 +1051,15 @@ class Game :
 
 
             
-        
+    def stat0(self) :
+        self.player.damage_boost=1.0
+        self.player.base_speed=self.capa[2]
+        self.player.ammo_boost=1
+        self.player2.damage_boost=1.0
+        self.player2.base_speed=self.capa2[2]
+        self.player2.ammo_boost=1
+
+
     def update(self) :
         
         
@@ -1046,7 +1072,7 @@ class Game :
             #over time
             self.mort+=1
 
-            if self.mort>2200 :
+            if self.mort>2200*self.ot :
                 self.mort_exp+=0.0000005
                 self.player.PV-=self.mort_exp*self.capa[0]
                 self.player2.PV-=self.mort_exp*self.capa2[0]
@@ -1056,13 +1082,17 @@ class Game :
                 self.p_on_stage[0]=True
                 self.p_how_long=self.ticks
                 self.p_pos_on_stage=self.p_pos[randint(0,len(self.p_pos)-1)]
-                self.p_which=self.p_all[randint(0,len(self.p_all)-1)]
+                if self.ot==1 :
+                    self.p_which=self.p_all[randint(0,len(self.p_all)-1)]
+                else :
+                    self.p_which=self.p_all[randint(0,len(self.p_all)-3)]#pas de heal
                 self.p_rect=self.p_which[0]
                 self.p_rect=self.p_rect.get_rect(x=self.p_pos_on_stage[0], y=self.p_pos_on_stage[1])
             if self.p_on_stage[0] and self.p_how_long+4000<self.ticks :
                 if self.player.rect.colliderect(self.p_rect) :
+                    self.stat0()
                     if self.p_which[1]=="heal" :
-                        self.player.PV+=300
+                        self.player.PV+=300*self.b_potion
                     elif self.p_which[1]=="speed" :
                         self.player.base_speed*=1.4
                         self.p_duration=self.ticks
@@ -1075,10 +1105,11 @@ class Game :
                         self.p_duration=self.ticks
                     else :
                         self.player.PV=1
-                    self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
+                    self.p_on_stage=[False,self.ticks+randint(6000/self.b_potion, 8000/self.b_potion)]
                 if self.player2.rect.colliderect(self.p_rect) :
+                    self.stat0()
                     if self.p_which[1]=="heal" :
-                        self.player2.PV+=300
+                        self.player2.PV+=300*self.b_potion
                     elif self.p_which[1]=="speed" :
                         self.player2.base_speed*=1.4
                         self.p_duration=self.ticks
@@ -1091,19 +1122,15 @@ class Game :
                         self.p_duration=self.ticks
                     else :
                         self.player2.PV=1
-                    self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
+                    self.p_on_stage=[False,self.ticks+randint(6000/self.b_potion, 8000/self.b_potion)]
 
                 if self.p_how_long+14000<self.ticks :
-                    self.p_on_stage=[False,self.ticks+randint(6000, 8000)]
+                    self.p_on_stage=[False,self.ticks+randint(6000/self.b_potion, 8000/self.b_potion)]
 
 
-            if self.p_duration+5000<self.ticks :
-                self.player.damage_boost=1.0
-                self.player.base_speed=self.capa[2]
-                self.player.ammo_boost=1
-                self.player2.damage_boost=1.0
-                self.player2.base_speed=self.capa2[2]
-                self.player2.ammo_boost=1
+            if self.p_duration+(5000*self.b_potion)<self.ticks :
+                self.stat0()
+                
 
 
             #movements
@@ -1258,7 +1285,8 @@ class Game :
                     player.furb2=(randint(0,1)-0.5)*2
                     player.furb22=(randint(0,1)-0.5)*2
                 elif pers=="Semibot" :
-                    player.PV+=semibot_heal
+                    if player.PV>semibot_damage :
+                        player.PV-=semibot_damage
                 player.duration_bullet=self.ticks
                 player.explosion=False
 
@@ -1298,7 +1326,7 @@ class Game :
                     player_adv.i_death=1*self.block
                     if self.rumb :
                         player_adv.joy.rumble(1,1,200)
-                if player.rect.colliderect(self.ice_pos) :
+                if player.rect.colliderect(self.ice_pos) and self.ot==1:
                     player.PV+=capa[1]/(berry_heal*FPS)*player.damage_boost*player.powerlift
 
                 if player.shooting :
@@ -1885,6 +1913,8 @@ class Game :
             self.screen.blit(font.render(pseudo_P1, True, (255, 255, 255)), (100, 10))
             t=font.render(pseudo_P2, True, (255, 255, 255))
             self.screen.blit(t, (WIDTH-110-t.get_width(), 10))
+            t=font.render(self.name_event, True, (255, 255, 255))
+            self.screen.blit(t, (WIDTH/2-t.get_width()/2, 10))
 
             if self.emt :
                 self.screen.blit(self.down, (self.player.x1-self.block/2, self.player.y1-self.block/2))

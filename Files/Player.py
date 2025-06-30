@@ -33,7 +33,7 @@ capa={"Hank" : (1320, 240, 0.9, 1.2,700, 1300, 6),
 }
 
 class Player :
-    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi, act):
+    def __init__(self, x, y, perso, zone_morte, WIDTH, HEIGH, j, block, autre_j_manque_dinspi, act, PV, fast):
         self.act=act
         self.block=block
         self.pers=perso
@@ -54,7 +54,11 @@ class Player :
         self.joy=pygame.joystick.Joystick(autre_j_manque_dinspi)
         self.joy.init()
         
-        self.PV=self.capa[0]
+        if PV==1 :
+            self.PV=self.capa[0]            
+        else :
+            self.PV=1
+        self.fast=fast
         self.speed=2
         self.slow=1
         self.stamina=2500
@@ -188,17 +192,17 @@ class Player :
 
         #déplacements
         if self.right and not lock:
-            self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
+            self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed*self.fast
             self.stamina_speed=2
         elif self.left and not lock :
-            self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed
+            self.x1+=self.speed*round(self.axe_x1,1)*self.block*self.base_speed*self.fast
             self.stamina_speed=2
 
         if self.down and not lock :
-            self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
+            self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed*self.fast
             self.stamina_speed=2
         elif self.up and not lock :
-            self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed
+            self.y1+=self.speed*round(self.axe_y1,1)*self.block*self.base_speed*self.fast
             self.stamina_speed=2
 
         #shoot
@@ -248,7 +252,7 @@ class Player :
 
         if self.reloading :
             self.joy.rumble(0.5,0.5,1)
-            if pygame.time.get_ticks()-self.time_reloading>3000 :
+            if pygame.time.get_ticks()-self.time_reloading>3000//(self.fast**2) :
                 self.reloading=False
                 self.canvibr=True
                 self.ammo=self.capa[6]
