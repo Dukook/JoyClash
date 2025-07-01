@@ -7,11 +7,11 @@ from Account import Choice, Write, Tour
 pygame.init()
 
 
-"""info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'"""
+info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
 tab=Tour()
 
-if tab[0] :
+"""if tab[0] :
     players=tab[2]
     stages=[players]
     stage_pos=1
@@ -24,7 +24,7 @@ if tab[0] :
 
 elif pygame.joystick.get_count() >= 2:
     info_P1, pseudo_P1=Choice(1)
-    info_P2, pseudo_P2=Choice(2)
+    info_P2, pseudo_P2=Choice(2)"""
 
 
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
@@ -84,7 +84,7 @@ act2=xbox
 
 
 nb_pers=len(pers)-1
-if tab[0] :
+if not tab[3] :
     nb_pers-=1
 nb_pers_base=nb_pers
 
@@ -95,12 +95,10 @@ class Menu :
     def __init__(self, screen, change):
         if tab[0] :
             global stages, stage_pos, player_next, players, nb_fight
-            gay=True
+            loop=True
             if nb_fight[0]>nb_fight[1] :
-                print(nb_fight)
                 stages.append(player_next)
                 players=stages[stage_pos]
-                print(players)
                 if len(players)>=2 :
                     stage_pos+=1
                     player_next=[]
@@ -109,12 +107,14 @@ class Menu :
                     nb_fight=[0,(len(players)//2)-1]
                 else :
                     print(f"{players[0]} win !")
-                    gay=False
-            if gay :
+                    loop=False
+                    self.running=False
+                    return
+            if loop :
                 global pseudo_P1, pseudo_P2
                 pseudo_P1=players[nb_fight[0]*2]
                 pseudo_P2=players[nb_fight[0]*2+1]
-                nb_fight[0]+=1
+                nb_fight[0]+=1#change here to make bo3 or bo5
         #setup de base
         self.screen=screen
         self.clock=pygame.time.Clock()

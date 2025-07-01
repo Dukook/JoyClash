@@ -139,4 +139,4 @@ def Tour() :
             tab.append(False)
         return tab
     else :
-        return [False]
+        return [False, False, [], False]
