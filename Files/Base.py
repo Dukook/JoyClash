@@ -7,11 +7,11 @@ from Account import Choice, Write, Tour
 pygame.init()
 
 
-info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
-info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'
+"""info_P1, pseudo_P1=["1740", "46546133468451", "True", "True", "True", "False", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], "Dukook"
+info_P2, pseudo_P2=["1740", "46546133468451", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True", "True"], 'DuCook'"""
 tab=Tour()
 
-"""if tab[0] :
+if tab[0] :
     players=tab[2]
     stages=[players]
     stage_pos=1
@@ -24,7 +24,7 @@ tab=Tour()
 
 elif pygame.joystick.get_count() >= 2:
     info_P1, pseudo_P1=Choice(1)
-    info_P2, pseudo_P2=Choice(2)"""
+    info_P2, pseudo_P2=Choice(2)
 
 
 screen = pygame.display.set_mode((800, 600), pygame.NOFRAME)
